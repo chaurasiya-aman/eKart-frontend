@@ -11,6 +11,7 @@ import Profile from "./pages/Profile";
 import Navbar from "./components/Navbar";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import "./App.css"
 
 const router = createBrowserRouter([
   {

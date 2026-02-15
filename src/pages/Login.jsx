@@ -134,7 +134,7 @@ export function Login() {
                   name="password"
                   placeholder="Enter your password"
                   className="pr-10"
-                  onChange={inputHandler}
+                  onChange={inputHandler} 
                   value={formData.password}
                   required
                 />

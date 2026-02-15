@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -7,10 +8,15 @@ import { toast } from "sonner";
 export default function ResetPassword() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  let [showPassword, setShowPassword] = useState(false);
   const email = useSelector((state) => state.user.user?.email);
   const navigate = useNavigate();
 
   const API_URL = import.meta.env.VITE_API_URL;
+
+  const toggleEyeIcon = () => {
+    setShowPassword(!showPassword);
+  };
 
   const formHandler = async (e) => {
     try {
@@ -22,7 +28,7 @@ export default function ResetPassword() {
         {
           newPassword: password,
           confirmPassword,
-        }
+        },
       );
 
       if (res.data.success) {
@@ -35,7 +41,7 @@ export default function ResetPassword() {
       toast.error(
         error.response?.data?.message ||
           error.message ||
-          "Something went wrong"
+          "Something went wrong",
       );
     }
   };
@@ -54,26 +60,53 @@ export default function ResetPassword() {
             <label className="block text-left text-sm font-medium mb-2">
               New Password
             </label>
-            <input
-              type="password"
-              placeholder="Enter new password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+
+            <div className="relative flex">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter new password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {showPassword ? (
+                <EyeOff
+                  className="w-5 h-5 text-gray-700 absolute right-2 bottom-2 cursor-pointer"
+                  onClick={toggleEyeIcon}
+                />
+              ) : (
+                <Eye
+                  className="w-5 h-5 text-gray-700 absolute right-2 bottom-2 cursor-pointer"
+                  onClick={toggleEyeIcon}
+                />
+              )}
+            </div>
           </div>
 
           <div>
             <label className="block text-left text-sm font-medium mb-2">
               Confirm Password
             </label>
-            <input
-              type="password"
-              placeholder="Confirm new password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <div className="relative flex">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Confirm new password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              {showPassword ? (
+                <EyeOff
+                  className="w-5 h-5 text-gray-700 absolute right-2 bottom-2 cursor-pointer"
+                  onClick={toggleEyeIcon}
+                />
+              ) : (
+                <Eye
+                  className="w-5 h-5 text-gray-700 absolute right-2 bottom-2 cursor-pointer"
+                  onClick={toggleEyeIcon}
+                />
+              )}
+            </div>
           </div>
 
           <button
