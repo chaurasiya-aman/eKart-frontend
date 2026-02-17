@@ -32,10 +32,9 @@ export default function ForgotPassword() {
     try {
       setLoading(true);
 
-      const res = await axios.post(
-        `${API_URL}/api/v1/user/forgot-password`,
-        { email }
-      );
+      const res = await axios.post(`${API_URL}/api/v1/user/forgot-password`, {
+        email,
+      });
 
       if (res.data.success) {
         setIsSuccess(true);
@@ -62,7 +61,7 @@ export default function ForgotPassword() {
 
       const res = await axios.post(
         `${API_URL}/api/v1/user/verify-otp/${email}`,
-        { otp }
+        { otp },
       );
 
       if (res.data.success) {
@@ -127,7 +126,10 @@ export default function ForgotPassword() {
           </p>
 
           <p className="text-gray-500 text-sm">
-            Please check your inbox and enter the OTP to continue.
+            Please check your inbox. If you don't see the email, kindly check
+            your <span className="font-medium text-gray-700">Spam</span>
+            or <span className="font-medium text-gray-700">Junk</span> folder as
+            well.
           </p>
 
           <form onSubmit={handleOtpSubmit} className="space-y-4">

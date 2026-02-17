@@ -26,22 +26,17 @@ export function Verify() {
           <CardDescription className="text-sm">
             We’ve sent a verification link to your registered email address.
             Please check your inbox and click the link to activate your account.
+            If you don’t receive it within a few minutes, check your Spam or
+            Junk folder and move it to your inbox.
           </CardDescription>
         </CardHeader>
 
         <CardFooter className="flex flex-col gap-3">
-          <Button
-            variant="outline"
-            className="w-full cursor-pointer"
-            disabled
-          >
+          <Button variant="outline" className="w-full cursor-pointer" disabled>
             Waiting for verification...
           </Button>
 
-          <Link
-            to="/login"
-            className="text-sm text-blue-600 hover:underline"
-          >
+          <Link to="/login" className="text-sm text-blue-600 hover:underline">
             Back to Login
           </Link>
         </CardFooter>
