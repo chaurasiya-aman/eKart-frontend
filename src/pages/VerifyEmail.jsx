@@ -9,7 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Link, useParams } from "react-router-dom";
 import { CheckCircle, XCircle } from "lucide-react";
-import axios from "axios";
+import api from "@/api/axios";
 
 export function VerifyEmail() {
   const { token } = useParams();
@@ -24,7 +24,7 @@ export function VerifyEmail() {
     setSuccess(null);
 
     try {
-      const res = await axios.post(
+      const res = await api.post(
         `${API_URL}/api/v1/user/verify/${token}`
       );
 

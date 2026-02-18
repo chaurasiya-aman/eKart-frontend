@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import React from "react";
@@ -17,6 +16,7 @@ import {
 } from "@/components/ui/card";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/redux/userSlice";
+import api from "@/api/axios";
 
 export function Login() {
   let [showPassword, setShowPassword] = useState(false);
@@ -41,7 +41,7 @@ export function Login() {
 
       setLoading(true);
 
-      let res = await axios.post(
+      let res = await api.post(
         `${API_URL}/api/v1/user/login`,
         formData,
         {

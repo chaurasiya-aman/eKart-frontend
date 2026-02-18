@@ -16,6 +16,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import api from "@/api/axios";
 
 export function SignUp() {
   let [showPassword, setShowPassword] = useState(false);
@@ -46,7 +47,7 @@ export function SignUp() {
 
       setLoading(true);
 
-      let res = await axios.post(
+      let res = await api.post(
         `${API_URL}/api/v1/user/register`,
         formData,
         {

@@ -1,10 +1,10 @@
 import { setUser } from "@/redux/userSlice";
-import axios from "axios";
 import { CheckCircle } from "lucide-react";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import api from "@/api/axios"; 
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -32,7 +32,7 @@ export default function ForgotPassword() {
     try {
       setLoading(true);
 
-      const res = await axios.post(`${API_URL}/api/v1/user/forgot-password`, {
+      const res = await api.post(`${API_URL}/api/v1/user/forgot-password`, {
         email,
       });
 
@@ -59,7 +59,7 @@ export default function ForgotPassword() {
     try {
       setLoading(true);
 
-      const res = await axios.post(
+      const res = await api.post(
         `${API_URL}/api/v1/user/verify-otp/${email}`,
         { otp },
       );

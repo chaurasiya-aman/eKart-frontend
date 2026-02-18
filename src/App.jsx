@@ -12,6 +12,7 @@ import Navbar from "./components/Navbar";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import "./App.css"
+import Error from "./pages/Error";
 
 const router = createBrowserRouter([
   {
@@ -62,6 +63,24 @@ const router = createBrowserRouter([
       <>
         <ResetPassword />
       </>
+    ),
+  },
+  {
+    path: "/error",
+    element: (
+      <>
+        <Error />
+      </>
+    ),
+  },
+  {
+    path: "*",
+    element: (
+      <Error
+        title="404 - Page Not Found"
+        message="The page you are looking for does not exist. or page is under construction"
+        code={404}
+      />
     ),
   },
 ]);

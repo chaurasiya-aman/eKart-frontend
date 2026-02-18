@@ -11,10 +11,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CheckCircle, User, Camera, Layers, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "sonner";
 import { setUser } from "@/redux/userSlice";
 import EditProfile from "./EditProfile";
+import api from "@/api/axios";
 
 const Profile = () => {
   const { user } = useSelector((state) => state.user);
@@ -30,7 +30,7 @@ const Profile = () => {
 
   const profileObj = async () => {
     try {
-      const res = await axios.get(
+      const res = await api.get(
         `${API_URL}/api/v1/user/get-user/${user._id}`
       );
       setProfileDetails({ ...res.data.user });
@@ -41,7 +41,7 @@ const Profile = () => {
 
   const logOutHandler = async () => {
     try {
-      const res = await axios.post(
+      const res = await api.post(
         `${API_URL}/api/v1/user/logout`,
         {},
         {
@@ -79,7 +79,7 @@ const Profile = () => {
 
     try {
       setIsUploading(true);
-      const res = await axios.put(
+      const res = await api.put(
         `${API_URL}/api/v1/user/profile/${user?._id}/update-profile`,
         formData,
         {
@@ -113,7 +113,7 @@ const Profile = () => {
         return;
       }
 
-      await axios.delete(
+      await api.delete(
         `${API_URL}/api/v1/user/profile/${user?._id}/delete-profile-pic`,
         {
           headers: {

@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "@/api/axios";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { useSelector } from "react-redux";
@@ -23,7 +23,7 @@ export default function ResetPassword() {
       e.preventDefault();
       console.log(email);
 
-      const res = await axios.put(
+      const res = await api.put(
         `${API_URL}/api/v1/user/change-password/${email}`,
         {
           newPassword: password,

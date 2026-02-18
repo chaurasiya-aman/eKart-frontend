@@ -6,6 +6,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import api from "@/api/axios";
 
 const EditProfile = ({ onProfileUpdated, initialData, type }) => {
   const [formData, setFormData] = useState({
@@ -39,7 +40,7 @@ const EditProfile = ({ onProfileUpdated, initialData, type }) => {
       setIsUpdate(true);
       e.preventDefault();
 
-      const res = await axios.put(
+      const res = await api.put(
         `${API_URL}/api/v1/user/profile/${userId}`,
         formData,
         {
