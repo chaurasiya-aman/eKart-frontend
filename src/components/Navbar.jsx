@@ -18,9 +18,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { toast } from "sonner";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/redux/userSlice";
+import api from "@/api/axios";
 
 const Navbar = () => {
   const user = useSelector((state) => state.user.user);
@@ -30,11 +30,12 @@ const Navbar = () => {
 
   const cartCount = 0;
   const accessToken = localStorage.getItem("accessToken");
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const logOutHandler = async () => {
     try {
-      const res = await axios.post(
-        "http://localhost:8080/api/v1/user/logout",
+      const res = await api.post(
+        `${API_URL}/api/v1/user/logout`,
         {},
         {
           headers: {
