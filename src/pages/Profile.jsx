@@ -25,6 +25,7 @@ const Profile = () => {
   const [typeVal, setTypeVal] = useState("profile");
   const [isUploading, setIsUploading] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isLogout, setIsLogout] = useState(false);
 
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -41,6 +42,7 @@ const Profile = () => {
 
   const logOutHandler = async () => {
     try {
+      setIsLogout(true);
       const res = await api.post(
         `${API_URL}/api/v1/user/logout`,
         {},
@@ -61,6 +63,7 @@ const Profile = () => {
     } finally {
       localStorage.removeItem("accessToken");
       dispatch(setUser(null));
+      setIsLogout(false);
       navigate("/login");
     }
   };
@@ -275,6 +278,7 @@ const Profile = () => {
                   className="bg-red-500 hover:bg-red-600 text-white cursor-pointer"
                   onClick={logOutHandler}
                 >
+                {isLogout && <Loader2 className="animate-spin w-8 h-8 text-white-500" />}
                   Logout
                 </Button>
               </CardDescription>
