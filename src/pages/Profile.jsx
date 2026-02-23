@@ -19,6 +19,7 @@ import api from "@/api/axios";
 const Profile = () => {
   const { user } = useSelector((state) => state.user);
   const [profileDetails, setProfileDetails] = useState(null);
+  const [loadingProfile, setLoadingProfile] = useState(true);
   const accessToken = localStorage.getItem("accessToken");
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -31,12 +32,13 @@ const Profile = () => {
 
   const profileObj = async () => {
     try {
-      const res = await api.get(
-        `${API_URL}/api/v1/user/get-user/${user._id}`
-      );
-      setProfileDetails({ ...res.data.user });
+      setLoadingProfile(true);
+      const res = await api.get(`${API_URL}/api/v1/user/get-user/${user._id}`);
+      setProfileDetails(res.data.user);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoadingProfile(false);
     }
   };
 
@@ -50,7 +52,7 @@ const Profile = () => {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
-        }
+        },
       );
       if (res.data.success) {
         toast.success(res.data.message);
@@ -89,7 +91,7 @@ const Profile = () => {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
-        }
+        },
       );
 
       setProfileDetails((prev) => ({
@@ -122,7 +124,7 @@ const Profile = () => {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
-        }
+        },
       );
 
       profileObj();
@@ -149,6 +151,14 @@ const Profile = () => {
     return (
       <div className="pt-32 text-center text-gray-600">
         Please login to view your profile.
+      </div>
+    );
+  }
+
+  if (loadingProfile) {
+    return (
+      <div className="pt-32 text-center">
+        <Loader2 className="animate-spin w-8 h-8 m-auto" />
       </div>
     );
   }
@@ -278,7 +288,9 @@ const Profile = () => {
                   className="bg-red-500 hover:bg-red-600 text-white cursor-pointer"
                   onClick={logOutHandler}
                 >
-                {isLogout && <Loader2 className="animate-spin w-8 h-8 text-white-500" />}
+                  {isLogout && (
+                    <Loader2 className="animate-spin w-8 h-8 text-white-500" />
+                  )}
                   Logout
                 </Button>
               </CardDescription>
