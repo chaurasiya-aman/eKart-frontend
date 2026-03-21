@@ -1,6 +1,13 @@
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 export const Hero = () => {
+
+  const navigate=useNavigate();
+
+  const handleClick = () => {
+    navigate("/products");
+  }
   return (
     <section
       className="relative text-white py-20 overflow-hidden"
@@ -35,6 +42,7 @@ export const Hero = () => {
               <Button
                 variant="outline"
                 className="border-white text-white hover:bg-white hover:text-purple-700 bg-transparent cursor-pointer"
+                onClick={handleClick}
               >
                 View Deals
               </Button>

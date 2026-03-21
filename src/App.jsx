@@ -11,8 +11,11 @@ import Profile from "./pages/Profile";
 import Navbar from "./components/Navbar";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
-import "./App.css"
+import "./App.css";
 import Error from "./pages/Error";
+import Products from "./pages/Products";
+import ProductPage from "./pages/ProductPage";
+import Cart from "./pages/Cart";
 
 const router = createBrowserRouter([
   {
@@ -62,6 +65,33 @@ const router = createBrowserRouter([
     element: (
       <>
         <ResetPassword />
+      </>
+    ),
+  },
+  {
+    path: "/products",
+    element: (
+      <>
+        <Navbar />
+        <Products />
+      </>
+    ),
+  },
+  {
+    path: "/cart",
+    element: (
+      <>
+        <Navbar />
+        <Cart />
+      </>
+    ),
+  },
+  {
+    path: "/product/:id",
+    element: (
+      <>
+        <Navbar />
+        <ProductPage />
       </>
     ),
   },

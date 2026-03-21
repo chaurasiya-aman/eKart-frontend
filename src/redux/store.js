@@ -1,10 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./userSlice";
 import errorReducer from "./errorSlice";
-
+import productReducer from "./productSlice";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-
 import {
   FLUSH,
   REHYDRATE,
@@ -19,27 +18,18 @@ const persistConfig = {
   storage,
 };
 
-const persistedUserReducer = persistReducer(
-  persistConfig,
-  userReducer
-);
+const persistedUserReducer = persistReducer(persistConfig, userReducer);
 
 const store = configureStore({
   reducer: {
     user: persistedUserReducer,
     error: errorReducer,
+    product: productReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: [
-          FLUSH,
-          REHYDRATE,
-          PAUSE,
-          PERSIST,
-          PURGE,
-          REGISTER,
-        ],
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     }),
 });

@@ -24,9 +24,9 @@ export function Verify() {
           </CardTitle>
 
           <CardDescription className="text-sm">
-            We’ve sent a verification link to your registered email address.
+            We've sent a verification link to your registered email address.
             Please check your inbox and click the link to activate your account.
-            If you don’t receive it within a few minutes, check your Spam or
+            If you don't receive it within a few minutes, check your Spam or
             Junk folder and move it to your inbox.
           </CardDescription>
         </CardHeader>
