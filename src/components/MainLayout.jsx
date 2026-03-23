@@ -1,3 +1,4 @@
+import FloatingAIButton from "./FloatingAIButton";
 import  Navbar  from "./Navbar";
 import { Outlet } from "react-router-dom";
 
@@ -8,6 +9,7 @@ const MainLayout = () => {
       <main className="pt-16">
         <Outlet />
       </main>
+       <FloatingAIButton />
     </>
   );
 };

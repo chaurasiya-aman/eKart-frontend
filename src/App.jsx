@@ -16,6 +16,8 @@ import Error from "./pages/Error";
 import Products from "./pages/Products";
 import ProductPage from "./pages/ProductPage";
 import Cart from "./pages/Cart";
+import ChatAI from "./pages/ChatAI";
+import FloatingAIButton from "./components/FloatingAIButton";
 
 const router = createBrowserRouter([
   {
@@ -83,6 +85,14 @@ const router = createBrowserRouter([
       <>
         <Navbar />
         <Cart />
+      </>
+    ),
+  },
+  {
+    path: "/chat-with-ai",
+    element: (
+      <>
+        <ChatAI />
       </>
     ),
   },
