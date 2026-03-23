@@ -114,6 +114,7 @@ export default function ChatAI() {
     setMessages(updated);
     setInput("");
     setLoading(true);
+    const API_URL = import.meta.env.VITE_API_URL;
 
     try {
       /* Build history from prior turns (skip greeting, skip current user msg) */
@@ -123,8 +124,7 @@ export default function ChatAI() {
           role: type === "user" ? "user" : "assistant",
           content: text,
         }));
-
-      const res = await fetch("http://localhost:8080/api/v1/chat/ai", {
+      const res = await fetch(`${API_URL}/api/v1/chat/ai`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
