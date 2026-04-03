@@ -114,10 +114,9 @@ const Profile = () => {
 
       await api.delete(
         `${API_URL}/api/v1/user/profile/${user?._id}/delete-profile-pic`,
+        {},
         {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+          withCredentials: true,
         },
       );
 
