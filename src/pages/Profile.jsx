@@ -84,9 +84,7 @@ const Profile = () => {
         `${API_URL}/api/v1/user/profile/${user?._id}/update-profile`,
         formData,
         {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+          withCredentials: true,
         },
       );
 
