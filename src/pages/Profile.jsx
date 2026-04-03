@@ -20,7 +20,6 @@ const Profile = () => {
   const { user } = useSelector((state) => state.user);
   const [profileDetails, setProfileDetails] = useState(null);
   const [loadingProfile, setLoadingProfile] = useState(true);
-  const accessToken = localStorage.getItem("accessToken");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [typeVal, setTypeVal] = useState("profile");
@@ -49,9 +48,7 @@ const Profile = () => {
         `${API_URL}/api/v1/user/logout`,
         {},
         {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+          withCredentials: true,
         },
       );
       if (res.data.success) {
@@ -63,7 +60,6 @@ const Profile = () => {
     } catch (error) {
       toast.error(error.message);
     } finally {
-      localStorage.removeItem("accessToken");
       dispatch(setUser(null));
       setIsLogout(false);
       navigate("/login");
@@ -147,7 +143,7 @@ const Profile = () => {
     }
   }, [user]);
 
-  if (!accessToken || !user) {
+  if (!user) {
     return (
       <div className="pt-32 text-center text-gray-600">
         Please login to view your profile.
