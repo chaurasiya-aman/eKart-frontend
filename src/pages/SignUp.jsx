@@ -1,27 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import React from "react";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2, ShoppingCart } from "lucide-react";
 import { toast } from "sonner";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import api from "@/api/axios";
 
 export function SignUp() {
-  let [showPassword, setShowPassword] = useState(false);
-  let [loading, setLoading] = useState(false);
-  let [formData, setFormData] = useState({
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     email: "",
@@ -33,88 +22,56 @@ export function SignUp() {
 
   const formHandler = async (event) => {
     event.preventDefault();
-
+    if (
+      !formData.email.trim() ||
+      !formData.firstName.trim() ||
+      !formData.lastName.trim() ||
+      !formData.password.trim()
+    ) {
+      toast.error("All fields are required");
+      return;
+    }
     try {
-      if (
-        !formData.email.trim() ||
-        !formData.firstName.trim() ||
-        !formData.lastName.trim() ||
-        !formData.password.trim()
-      ) {
-        toast.error("All fields are required");
-        return;
-      }
-
       setLoading(true);
-
-      let res = await api.post(
-        `${API_URL}/api/v1/user/register`,
-        formData,
-        {
-          headers: {
-            "Content-type": "application/json",
-          },
-        }
-      );
-
-      console.log(res.data);
-
+      const res = await api.post(`${API_URL}/api/v1/user/register`, formData, {
+        headers: { "Content-type": "application/json" },
+      });
       if (res.data.success) {
         toast.success(res.data.message);
-
-        setTimeout(() => {
-          navigate("/verify");
-        }, 1000);
-
-        setFormData({
-          firstName: "",
-          lastName: "",
-          email: "",
-          password: "",
-        });
+        setTimeout(() => navigate("/verify"), 1000);
+        setFormData({ firstName: "", lastName: "", email: "", password: "" });
       }
     } catch (error) {
-      console.error(
-        "Error during registration:",
-        error.response?.data || error.message
-      );
       toast.error(error.response?.data?.message || "Registration failed");
     } finally {
       setLoading(false);
     }
   };
 
-  const toggleEyeIcon = () => {
-    setShowPassword(!showPassword);
-  };
-
   const inputHandler = (event) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      [event.target.name]: event.target.value,
-    }));
+    setFormData((prev) => ({ ...prev, [event.target.name]: event.target.value }));
   };
 
   return (
-    <div
-      style={{ marginTop: "-60px" }}
-      className="flex items-center justify-center min-h-screen bg-blue-100 p-2"
-    >
-      <Card className="w-full max-w-sm text-center">
-        <CardHeader>
-          <CardTitle className="text-xl font-bold text-blue-700">
-            Sign Up
-          </CardTitle>
-          <CardDescription className="text-sm">
-            Create Your Account Here
-          </CardDescription>
-        </CardHeader>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-indigo-50 px-4 py-10">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-12 h-12 bg-gray-900 rounded-2xl mb-4">
+            <ShoppingCart className="w-6 h-6 text-white" />
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
+            Create account
+          </h1>
+          <p className="text-gray-500 text-sm mt-1.5">Join eKart and start shopping</p>
+        </div>
 
-        <form onSubmit={formHandler} noValidate method="POST">
-          <CardContent className="space-y-4">
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-1 space-y-1">
-                <Label htmlFor="firstName">First Name</Label>
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
+          <form onSubmit={formHandler} noValidate className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="firstName" className="text-sm font-medium text-gray-700">
+                  First Name
+                </Label>
                 <Input
                   id="firstName"
                   type="text"
@@ -123,11 +80,13 @@ export function SignUp() {
                   onChange={inputHandler}
                   value={formData.firstName}
                   required
+                  className="rounded-xl border-gray-200 bg-gray-50 focus:bg-white h-11 text-sm"
                 />
               </div>
-
-              <div className="flex-1 space-y-1">
-                <Label htmlFor="lastName">Last Name</Label>
+              <div className="space-y-1.5">
+                <Label htmlFor="lastName" className="text-sm font-medium text-gray-700">
+                  Last Name
+                </Label>
                 <Input
                   id="lastName"
                   type="text"
@@ -136,12 +95,15 @@ export function SignUp() {
                   onChange={inputHandler}
                   value={formData.lastName}
                   required
+                  className="rounded-xl border-gray-200 bg-gray-50 focus:bg-white h-11 text-sm"
                 />
               </div>
             </div>
 
-            <div className="space-y-1">
-              <Label htmlFor="email">Email</Label>
+            <div className="space-y-1.5">
+              <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                Email address
+              </Label>
               <Input
                 id="email"
                 type="email"
@@ -150,73 +112,58 @@ export function SignUp() {
                 onChange={inputHandler}
                 value={formData.email}
                 required
+                className="rounded-xl border-gray-200 bg-gray-50 focus:bg-white h-11 text-sm"
               />
             </div>
 
-            <div className="space-y-1">
-              <Label htmlFor="password">Password</Label>
-              <div className="relative flex">
+            <div className="space-y-1.5">
+              <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+                Password
+              </Label>
+              <div className="relative">
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
                   name="password"
-                  placeholder="Create a password"
-                  className="pr-10"
+                  placeholder="Create a strong password"
+                  className="pr-10 rounded-xl border-gray-200 bg-gray-50 focus:bg-white h-11 text-sm"
                   onChange={inputHandler}
                   value={formData.password}
                   required
                 />
-                {showPassword ? (
-                  <EyeOff
-                    className="w-5 h-5 text-gray-700 absolute right-2 bottom-2 cursor-pointer"
-                    onClick={toggleEyeIcon}
-                  />
-                ) : (
-                  <Eye
-                    className="w-5 h-5 text-gray-700 absolute right-2 bottom-2 cursor-pointer"
-                    onClick={toggleEyeIcon}
-                  />
-                )}
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
               </div>
             </div>
-          </CardContent>
 
-          <div className="flex justify-center items-center">
-            <CardAction>
-              <div className="text-center text-sm text-muted-foreground my-2">
-                Already have an account?{" "}
-                <Link to="/login">
-                  <Button
-                    variant="link"
-                    className="px-1 cursor-pointer hover:text-red-500"
-                  >
-                    Login
-                  </Button>
-                </Link>
-              </div>
-            </CardAction>
-          </div>
-
-          <CardFooter className="flex flex-col gap-2">
             <Button
               type="submit"
-              className="w-full cursor-pointer bg-blue-500 hover:bg-blue-400"
+              disabled={loading}
+              className="w-full h-11 rounded-xl bg-gray-900 hover:bg-gray-700 text-white font-semibold text-sm cursor-pointer mt-2"
             >
-              {loading ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin mr-2" /> Please wait
-                </>
-              ) : (
-                <>Sign Up</>
-              )}
+              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Create Account"}
             </Button>
-          </CardFooter>
-        </form>
+          </form>
 
-        <a href="/" className="hover:underline hover:text-red-500">
-          back To Home
-        </a>
-      </Card>
+          <p className="text-center text-sm text-gray-500 mt-5">
+            Already have an account?{" "}
+            <Link to="/login" className="text-blue-600 font-medium hover:underline">
+              Sign In
+            </Link>
+          </p>
+        </div>
+
+        <div className="text-center mt-5">
+          <Link to="/" className="text-xs text-gray-400 hover:text-gray-600 hover:underline transition-colors">
+            ← Back to Home
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }

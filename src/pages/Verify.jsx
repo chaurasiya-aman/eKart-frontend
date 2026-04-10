@@ -6,24 +6,24 @@ import {
   CardDescription,
   CardFooter,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Mail } from "lucide-react";
+import "@/utils/Verify.css";
 
 export function Verify() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-blue-100 p-4">
-      <Card className="w-full max-w-sm text-center">
-        <CardHeader className="space-y-2">
-          <div className="flex justify-center">
-            <Mail className="w-10 h-10 text-blue-600" />
+    <div className="verify-page">
+      <Card className="verify-card">
+        <CardHeader className="verify-card-header">
+          <div className="verify-icon-wrap">
+            <Mail className="verify-icon" />
           </div>
 
-          <CardTitle className="text-xl font-bold text-blue-700">
+          <CardTitle className="verify-title">
             Verify Your Email
           </CardTitle>
 
-          <CardDescription className="text-sm">
+          <CardDescription className="verify-desc">
             We've sent a verification link to your registered email address.
             Please check your inbox and click the link to activate your account.
             If you don't receive it within a few minutes, check your Spam or
@@ -31,12 +31,13 @@ export function Verify() {
           </CardDescription>
         </CardHeader>
 
-        <CardFooter className="flex flex-col gap-3">
-          <Button variant="outline" className="w-full cursor-pointer" disabled>
+        <CardFooter className="verify-footer">
+          <div className="verify-waiting-btn">
+            <span className="verify-waiting-dot" />
             Waiting for verification...
-          </Button>
+          </div>
 
-          <Link to="/login" className="text-sm text-blue-600 hover:underline">
+          <Link to="/login" className="verify-back-link">
             Back to Login
           </Link>
         </CardFooter>

@@ -8,9 +8,7 @@ export function Home() {
 
   useEffect(() => {
     const seen = localStorage.getItem("serverNoticeSeen");
-    if (!seen) {
-      setShowNotice(true);
-    }
+    if (!seen) setShowNotice(true);
   }, []);
 
   const handleOk = () => {
@@ -21,17 +19,19 @@ export function Home() {
   return (
     <div>
       {showNotice && (
-        <div className="fixed top-0 left-0 w-full bg-yellow-300 text-black p-3 text-center z-50 shadow-md">
-          ⚠️ This project is hosted on a free server. It may take 30–60 seconds to start (on first request).
+        <div className="fixed top-0 left-0 w-full bg-yellow-300 text-black px-3 py-2 sm:py-3 text-center z-50 shadow-md text-xs sm:text-sm flex items-center justify-center flex-wrap gap-2">
+          <span>
+            ⚠️ This project is hosted on a free server. It may take 30–60 seconds
+            to start on first request.
+          </span>
           <button
             onClick={handleOk}
-            className="ml-4 px-3 py-1 bg-black text-white rounded"
+            className="px-3 py-1 bg-black text-white rounded cursor-pointer text-xs whitespace-nowrap"
           >
             OK
           </button>
         </div>
       )}
-
       <Hero />
       <Features />
       <Footer />

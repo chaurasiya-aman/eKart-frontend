@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import "@/utils/Profile.css";
 import {
   Card,
   CardContent,
@@ -61,6 +62,7 @@ const Profile = () => {
       toast.error(error.message);
     } finally {
       dispatch(setUser(null));
+      localStorage.removeItem("serverNoticeSeen");
       setIsLogout(false);
       navigate("/login");
     }
@@ -142,181 +144,224 @@ const Profile = () => {
 
   if (!user) {
     return (
-      <div className="pt-32 text-center text-gray-600">
-        Please login to view your profile.
+      <div className="profile-no-user-wrap">
+        <div className="profile-no-user-box">
+          <div className="profile-no-user-icon">
+            <User className="w-8 h-8 text-indigo-500" />
+          </div>
+          <p className="profile-no-user-text">
+            Please login to view your profile.
+          </p>
+        </div>
       </div>
     );
   }
 
   if (loadingProfile) {
     return (
-      <div className="pt-32 text-center">
-        <Loader2 className="animate-spin w-8 h-8 m-auto" />
+      <div className="profile-loading-wrap">
+        <div className="profile-loading-box">
+          <div className="profile-loading-icon">
+            <Loader2 className="animate-spin w-7 h-7 text-indigo-500" />
+          </div>
+          <p className="profile-loading-text">Loading profile…</p>
+        </div>
       </div>
     );
   }
 
-  return (
-    <div className="pt-20 min-h-screen m-2">
-      <Tabs
-        value={typeVal}
-        onValueChange={setTypeVal}
-        className="m-auto max-w-[600px]"
-      >
-        <TabsList className="m-auto">
-          <TabsTrigger value="profile" className="cursor-pointer">
-            Profile
-          </TabsTrigger>
-          <TabsTrigger value="orders" className="cursor-pointer">
-            Orders
-          </TabsTrigger>
-          <TabsTrigger value="edit-profile" className="cursor-pointer">
-            Edit Profile
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="profile">
-          <Card>
-            <CardHeader>
-              <div className="m-auto relative w-24 h-24">
-                {isUploading ? (
-                  <div className="w-24 h-24 rounded-full border-4 border-blue-100 flex items-center justify-center bg-gray-100">
-                    <Loader2 className="animate-spin w-8 h-8 text-blue-500" />
-                  </div>
-                ) : profileDetails?.profilePic ? (
-                  <img
-                    src={profileDetails.profilePic}
-                    alt="profile"
-                    className="w-24 h-24 rounded-full object-cover border-4 border-blue-100"
-                  />
-                ) : (
-                  <div className="w-24 h-24 rounded-full border-4 border-gray-700 bg-gray-100 flex items-center justify-center">
-                    <User className="w-14 h-14 text-gray-700" />
-                  </div>
-                )}
-
-                <label
-                  htmlFor="profileImage"
-                  className="absolute bottom-0 right-0 w-8 h-8 rounded-full bg-black/70 flex items-center justify-center cursor-pointer"
-                >
-                  <Camera className="w-4 h-4 text-white" />
-                </label>
-                <input
-                  id="profileImage"
-                  type="file"
-                  accept="image/*"
-                  className="sr-only"
-                  name="profilePic"
-                  onChange={handleImageChange}
-                />
-              </div>
-
-              <div className="flex justify-center items-center gap-1 mt-2">
-                <CardTitle className="text-sm">
-                  <i>{profileDetails?.email || user.email}</i>
-                </CardTitle>
-                {profileDetails?.isVerified && (
-                  <CheckCircle className="w-5 h-5 text-green-500" />
-                )}
-              </div>
-
-              <div className="flex justify-center items-center px-20">
-                <Button
-                  onClick={toggle}
-                  className="w-fit cursor-pointer m-1 bg-yellow-500 hover:bg-yellow-600 text-white text-xs"
-                >
-                  Edit Profile
-                </Button>
-                <Button
-                  onClick={deleteProfilePic}
-                  className="w-fit cursor-pointer bg-red-500 hover:bg-red-600 text-white text-xs "
-                >
-                  {isDeleting && (
-                    <Loader2 className="animate-spin w-8 h-8 text-red-100" />
-                  )}
-                  Delete Photo
-                </Button>
-              </div>
-
-              <CardDescription className="mt-4 space-y-3 text-sm">
-                <hr />
-
-                <p>
-                  <b>Name:</b> {profileDetails?.firstName}{" "}
-                  {profileDetails?.lastName}
-                </p>
-
-                <p>
-                  <b>Phone:</b> {profileDetails?.phoneNo || "Not provided"}
-                </p>
-
-                <p>
-                  <b>City:</b> {profileDetails?.city || "Not provided"}
-                </p>
-
-                <p>
-                  <b>Address:</b> {profileDetails?.address || "Not provided"}
-                </p>
-
-                <p>
-                  <b>Zip Code:</b> {profileDetails?.zipCode || "Not provided"}
-                </p>
-
-                <p>
-                  <b>About:</b> {profileDetails?.about || "No bio added"}
-                </p>
-
-                <p>
-                  <b>Email Status:</b>{" "}
-                  {profileDetails?.isVerified ? (
-                    <span className="text-green-600">Verified</span>
-                  ) : (
-                    <span className="text-red-600">Not Verified</span>
-                  )}
-                </p>
-
-                <hr />
-
-                <Button
-                  className="bg-red-500 hover:bg-red-600 text-white cursor-pointer"
-                  onClick={logOutHandler}
-                >
-                  {isLogout && (
-                    <Loader2 className="animate-spin w-8 h-8 text-white-500" />
-                  )}
-                  Logout
-                </Button>
-              </CardDescription>
-            </CardHeader>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="orders">
-          <Card>
-            <CardHeader>
-              <Layers className="w-16 h-16 m-auto" />
-            </CardHeader>
-            <CardContent className="text-sm text-muted-foreground">
-              No orders yet.
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="edit-profile">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-center">Edit Profile</CardTitle>
-              <hr />
-              <EditProfile
-                onProfileUpdated={profileObj}
-                initialData={profileDetails}
-                type={setTypeVal}
-              />
-            </CardHeader>
-          </Card>
-        </TabsContent>
-      </Tabs>
+  const infoRow = (label, value) => (
+    <div className="profile-info-row">
+      <span className="profile-info-label">{label}</span>
+      <span className="profile-info-value">{value}</span>
     </div>
+  );
+
+  return (
+    <>
+      <div className="profile-root">
+        <Tabs
+          value={typeVal}
+          onValueChange={setTypeVal}
+          className="profile-tabs-wrapper"
+        >
+          <TabsList className="profile-tabs-list">
+            <TabsTrigger
+              value="profile"
+              className="profile-tab-trigger cursor-pointer"
+            >
+              Profile
+            </TabsTrigger>
+            <TabsTrigger
+              value="orders"
+              className="profile-tab-trigger cursor-pointer"
+            >
+              Orders
+            </TabsTrigger>
+            <TabsTrigger
+              value="edit-profile"
+              className="profile-tab-trigger cursor-pointer"
+            >
+              Edit Profile
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="profile">
+            <Card className="profile-card">
+              <CardHeader className="pb-0">
+                <div className="text-center pt-2">
+                  <div className="profile-avatar-ring">
+                    {isUploading ? (
+                      <div className="profile-avatar-placeholder">
+                        <Loader2 className="animate-spin w-7 h-7 text-indigo-500" />
+                      </div>
+                    ) : profileDetails?.profilePic ? (
+                      <img
+                        src={profileDetails.profilePic}
+                        alt="profile"
+                        className="profile-avatar-img"
+                      />
+                    ) : (
+                      <div className="profile-avatar-placeholder">
+                        <User className="w-10 h-10 text-indigo-500" />
+                      </div>
+                    )}
+
+                    <label
+                      htmlFor="profileImage"
+                      className="profile-camera-btn"
+                    >
+                      <Camera className="w-3.5 h-3.5 text-white" />
+                    </label>
+                    <input
+                      id="profileImage"
+                      type="file"
+                      accept="image/*"
+                      className="sr-only"
+                      name="profilePic"
+                      onChange={handleImageChange}
+                    />
+                  </div>
+
+                  <div className="profile-name">
+                    {profileDetails?.firstName} {profileDetails?.lastName}
+                  </div>
+
+                  <div className="profile-email-badge">
+                    <CardTitle
+                      className="text-[13px] font-normal italic"
+                      style={{ fontFamily: "'DM Sans', sans-serif" }}
+                    >
+                      {profileDetails?.email || user.email}
+                    </CardTitle>
+                    {profileDetails?.isVerified && (
+                      <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
+                    )}
+                  </div>
+
+                  <div className="profile-action-row">
+                    <Button
+                      onClick={toggle}
+                      className="profile-action-btn btn-edit"
+                    >
+                      Edit Profile
+                    </Button>
+                    <Button
+                      onClick={deleteProfilePic}
+                      className="profile-action-btn btn-delete-photo"
+                    >
+                      {isDeleting && (
+                        <Loader2 className="animate-spin w-3.5 h-3.5" />
+                      )}
+                      Delete Photo
+                    </Button>
+                  </div>
+                </div>
+              </CardHeader>
+
+              <CardDescription as="div" className="profile-card-desc">
+                <div className="profile-info-section">
+                  <div className="profile-section-label">
+                    Contact & Location
+                  </div>
+                  {infoRow("Phone", profileDetails?.phoneNo || "Not provided")}
+                  {infoRow("City", profileDetails?.city || "Not provided")}
+                  {infoRow(
+                    "Address",
+                    profileDetails?.address || "Not provided",
+                  )}
+                  {infoRow(
+                    "Zip Code",
+                    profileDetails?.zipCode || "Not provided",
+                  )}
+
+                  <div className="profile-section-label">About</div>
+                  {infoRow("Bio", profileDetails?.about || "No bio added")}
+
+                  <div className="profile-section-label">Account</div>
+                  {infoRow(
+                    "Email",
+                    profileDetails?.isVerified ? (
+                      <span className="profile-status-verified">
+                        <CheckCircle className="w-3 h-3" /> Verified
+                      </span>
+                    ) : (
+                      <span className="profile-status-unverified">
+                        Not Verified
+                      </span>
+                    ),
+                  )}
+                </div>
+
+                <div className="profile-logout-section">
+                  <Button
+                    className="profile-action-btn btn-logout"
+                    onClick={logOutHandler}
+                  >
+                    {isLogout && (
+                      <Loader2 className="animate-spin w-3.5 h-3.5" />
+                    )}
+                    Logout
+                  </Button>
+                </div>
+              </CardDescription>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="orders">
+            <Card className="profile-card">
+              <CardHeader>
+                <div className="orders-empty">
+                  <div className="orders-icon-wrap">
+                    <Layers className="w-9 h-9 text-gray-300" />
+                  </div>
+                  <p className="orders-no-orders-title">No orders yet</p>
+                </div>
+              </CardHeader>
+              <CardContent className="text-sm text-muted-foreground hidden">
+                No orders yet.
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="edit-profile">
+            <Card className="profile-card">
+              <CardHeader>
+                <CardTitle className="profile-edit-title">
+                  Edit Profile
+                </CardTitle>
+                <hr className="profile-edit-divider" />
+                <EditProfile
+                  onProfileUpdated={profileObj}
+                  initialData={profileDetails}
+                  type={setTypeVal}
+                />
+              </CardHeader>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
+    </>
   );
 };
 

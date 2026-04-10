@@ -1,61 +1,107 @@
+import api from "@/api/axios";
 import { useState } from "react";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 
-export default function CartItem({ styles, item , setItems, fmt }) {
+export default function CartItem({ items, item, setItems, fmt }) {
   const [removing, setRemoving] = useState(null);
+  const [loadingQty, setLoadingQty] = useState(null);
+  const API_URL = import.meta.env.VITE_API_URL;
 
-  const changeQty = (id, delta) => {
-    setItems((prev) =>
-      prev.map((item) =>
-        item.id === id
-          ? { ...item, quantity: Math.max(1, item.quantity + delta) }
-          : item, 
-      ),
-    );
+  const changeQty = async (cartItemId, delta) => {
+    const prevItems = [...items];
+    const targetItem = items.find((i) => i._id === cartItemId);
+    if (!targetItem) return;
+    const type = delta === 1 ? "increase" : "decrease";
+    try {
+      setLoadingQty(cartItemId);
+      setItems((prev) =>
+        prev.map((i) =>
+          i._id === cartItemId
+            ? { ...i, quantity: Math.max(1, i.quantity + delta) }
+            : i
+        )
+      );
+      await api.put(
+        `${API_URL}/api/v1/cart/update-qty`,
+        { productId: targetItem.productId._id, type },
+        { withCredentials: true }
+      );
+    } catch (error) {
+      setItems(prevItems);
+      toast.error(error?.response?.data?.message || "Failed to update quantity");
+    } finally {
+      setLoadingQty(null);
+    }
   };
 
-  const removeItem = (id) => {
-    setRemoving(id);
-    setTimeout(() => {
-      setItems((prev) => prev.filter((item) => item.id !== id));
+  const removeItem = async (productId) => {
+    const prevItems = [...items];
+    try {
+      setRemoving(productId);
+      setItems((prev) => prev.filter((i) => i.productId._id !== productId));
+      await api.delete(`${API_URL}/api/v1/cart/${productId}`, {
+        withCredentials: true,
+      });
+    } catch (err) {
+      setItems(prevItems);
+      toast.error(err?.response?.data?.message || "Failed to remove item");
+    } finally {
       setRemoving(null);
-    }, 200);
+    }
   };
+
   return (
     <div
+      className="cart-item"
       style={{
-        ...styles.cartItem,
-        opacity: removing === item.id ? 0 : 1,
-        transform: removing === item.id ? "translateX(12px)" : "none",
-        transition: "opacity 0.2s, transform 0.2s",
+        opacity: removing === item.productId._id ? 0.4 : 1,
+        pointerEvents: removing === item.productId._id ? "none" : "auto",
       }}
     >
       <img
-        src={item.image}
-        alt={item.name}
-        style={styles.itemImg}
-        onError={(e) => (e.target.style.background = "#f0f0f0")}
+        src={item.productId?.productImage?.[0]?.url}
+        alt={item.productId?.productName}
+        className="cart-item-img"
+        onError={(e) => (e.target.src = "/fallback.png")}
       />
-      <div style={styles.itemInfo}>
-        <div style={styles.itemName}>{item.name}</div>
-        <div style={styles.itemPrice}>{fmt(item.price)} each</div>
-        <div style={styles.itemTag}>{item.tag}</div>
+
+      <div className="cart-item-info">
+        <div className="cart-item-name">{item.productId?.productName}</div>
+        <div className="cart-item-price">{fmt(item.productId?.productPrice)} each</div>
+        <span className="cart-item-tag">{item.productId?.category}</span>
+        <span className="cart-item-tag">{item.productId?.brand}</span>
       </div>
-      <div style={styles.itemRight}>
-        <div style={styles.itemTotal}>{fmt(item.price * item.quantity)}</div>
-        <div style={styles.qtyCtrl}>
-          <button style={styles.qtyBtn} onClick={() => changeQty(item.id, -1)}>
-            −
+
+      <div className="cart-item-right">
+        <div className="cart-item-total">{fmt(item.price * item.quantity)}</div>
+
+        <div className="cart-qty-ctrl">
+          <button
+            className="cart-qty-btn"
+            disabled={loadingQty === item._id}
+            onClick={() => changeQty(item._id, -1)}
+          >
+            {loadingQty === item._id ? <Loader2 className="animate-spin w-3 h-3" /> : "−"}
           </button>
-          <div style={styles.qtyNum}>{item.quantity}</div>
-          <button style={styles.qtyBtn} onClick={() => changeQty(item.id, 1)}>
-            +
+          <div className="cart-qty-num">{item.quantity}</div>
+          <button
+            className="cart-qty-btn"
+            disabled={loadingQty === item._id}
+            onClick={() => changeQty(item._id, 1)}
+          >
+            {loadingQty === item._id ? <Loader2 className="animate-spin w-3 h-3" /> : "+"}
           </button>
         </div>
-        <button style={styles.removeBtn} onClick={() => removeItem(item.id)}>
+
+        <button
+          className="cart-remove-btn"
+          disabled={removing === item.productId._id}
+          onClick={() => removeItem(item.productId._id)}
+        >
           Remove
         </button>
       </div>
     </div>
   );
 }
-

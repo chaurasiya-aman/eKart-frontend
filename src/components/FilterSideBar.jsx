@@ -10,6 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import "@/utils/FilterSideBar.css";
 
 export default function FilterSideBar({ filter, setFilter }) {
   const [open, setOpen] = useState(false);
@@ -24,11 +25,9 @@ export default function FilterSideBar({ filter, setFilter }) {
     ...new Set(allProducts.map((product) => product.brand).filter(Boolean)),
   ];
 
-  // Category (multi-select)
   const handleCategoryChange = (category) => {
     setFilter((prev) => {
       const exists = prev.categories.includes(category);
-
       return {
         ...prev,
         categories: exists
@@ -38,75 +37,53 @@ export default function FilterSideBar({ filter, setFilter }) {
     });
   };
 
-  // Brand (single select + ALL)
   const handleBrandChange = (value) => {
     if (value === "ALL") {
-      setFilter((prev) => ({
-        ...prev,
-        brands: [], // no filter → show all
-      }));
+      setFilter((prev) => ({ ...prev, brands: [] }));
     } else {
-      setFilter((prev) => ({
-        ...prev,
-        brands: [value],
-      }));
+      setFilter((prev) => ({ ...prev, brands: [value] }));
     }
   };
 
   return (
     <>
-      {/* Mobile Button */}
-      <div className="lg:hidden p-3">
-        <button
-          onClick={() => setOpen(true)}
-          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg"
-        >
+      <div className="fs-mobile-btn-wrap">
+        <button className="fs-mobile-btn" onClick={() => setOpen(true)}>
           <SlidersHorizontal size={18} />
           Filters
         </button>
       </div>
 
-      {/* Overlay */}
       {open && (
         <div
-          className="fixed inset-0 bg-black/40 z-40 lg:hidden"
+          className="fs-overlay"
           onClick={() => setOpen(false)}
         />
       )}
 
-      {/* Sidebar */}
       <div
-        className={`fixed lg:static top-0 left-0 h-full mt-5 w-72 bg-white shadow-lg p-5 z-50 transform transition-transform duration-300
-        ${open ? "translate-x-0" : "-translate-x-full"} 
-        lg:translate-x-0`}
+        className={`fs-sidebar ${open ? "fs-open" : ""}`}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Mobile Header */}
-        <div className="flex justify-between items-center mb-6 lg:hidden">
-          <h2 className="text-xl font-semibold">Filters</h2>
-          <button onClick={() => setOpen(false)}>
+        <div className="fs-mobile-header">
+          <h2 className="fs-title">Filters</h2>
+          <button className="fs-close-btn" onClick={() => setOpen(false)}>
             <X size={22} />
           </button>
         </div>
 
-        {/* Desktop Title */}
-        <h2 className="text-xl font-semibold mb-6 hidden lg:block">
-          Filters
-        </h2>
+        <div className="fs-desktop-title">
+          <h2 className="fs-title">Filters</h2>
+        </div>
 
-        {/* Category */}
-        <div className="mb-6">
-          <h3 className="font-medium mb-3">Category</h3>
-
-          <div className="space-y-2 text-sm">
+        <div className="fs-section">
+          <p className="fs-section-label">Category</p>
+          <div className="fs-checkbox-list">
             {allCategories.map((category) => (
-              <label
-                key={category}
-                className="flex items-center gap-2 cursor-pointer"
-              >
+              <label key={category} className="fs-checkbox-label">
                 <input
                   type="checkbox"
-                  className="accent-blue-600"
+                  className="fs-checkbox"
                   checked={filter.categories.includes(category)}
                   onChange={() => handleCategoryChange(category)}
                 />
@@ -116,25 +93,21 @@ export default function FilterSideBar({ filter, setFilter }) {
           </div>
         </div>
 
-        {/* Brand Select */}
-        <div className="mb-6">
-          <h3 className="font-medium mb-3">Brand</h3>
+        <hr className="fs-divider" />
 
+        <div className="fs-section">
+          <p className="fs-section-label">Brand</p>
           <Select
             onValueChange={handleBrandChange}
-            value={filter.brands[0] || "ALL"} // controlled
+            value={filter.brands[0] || "ALL"}
           >
-            <SelectTrigger className="w-full max-w-48">
+            <SelectTrigger className="fs-select-trigger">
               <SelectValue placeholder="Select a brand" />
             </SelectTrigger>
-
             <SelectContent>
               <SelectGroup>
                 <SelectLabel>Brands</SelectLabel>
-
-                {/*  ALL option */}
                 <SelectItem value="ALL">ALL</SelectItem>
-
                 {allBrands.map((brand) => (
                   <SelectItem key={brand} value={brand}>
                     {brand.toUpperCase()}
@@ -145,45 +118,38 @@ export default function FilterSideBar({ filter, setFilter }) {
           </Select>
         </div>
 
-        {/* Price */}
-        <div className="mb-6">
-          <h3 className="font-medium mb-3">Price Range</h3>
+        <hr className="fs-divider" />
 
-          <input
-            type="range"
-            min="0"
-            max="100000"
-            className="w-full"
-            value={filter.price}
-            onChange={(e) =>
-              setFilter((prev) => ({
-                ...prev,
-                price: Number(e.target.value),
-              }))
-            }
-          />
-
-          <div className="flex justify-between text-xs text-gray-500 mt-1">
-            <span>₹0</span>
-            <span>₹{filter.price}</span>
+        <div className="fs-section">
+          <p className="fs-section-label">Price Range</p>
+          <div className="fs-range-wrap">
+            <input
+              type="range"
+              min="0"
+              max="100000"
+              className="fs-range"
+              value={filter.price}
+              onChange={(e) =>
+                setFilter((prev) => ({ ...prev, price: Number(e.target.value) }))
+              }
+            />
+            <div className="fs-range-labels">
+              <span>₹0</span>
+              <span className="fs-price-value">₹{filter.price.toLocaleString()}</span>
+            </div>
           </div>
         </div>
 
-        {/* Reset */}
-        <div className="flex flex-col gap-2">
-          <button
-            className="border py-2 rounded-lg hover:bg-gray-100 cursor-pointer"
-            onClick={() =>
-              setFilter({
-                categories: [],
-                brands: [],
-                price: 100000,
-              })
-            }
-          >
-            Reset
-          </button>
-        </div>
+        <hr className="fs-divider" />
+
+        <button
+          className="fs-reset-btn"
+          onClick={() =>
+            setFilter({ categories: [], brands: [], price: 100000 })
+          }
+        >
+          Reset Filters
+        </button>
       </div>
     </>
   );

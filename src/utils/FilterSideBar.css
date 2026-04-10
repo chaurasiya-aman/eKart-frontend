@@ -1,0 +1,241 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600&family=Sora:wght@600;700&display=swap');
+
+:root {
+  --fs-accent: #6366f1;
+  --fs-accent-light: #eef2ff;
+  --fs-accent-hover: #4f46e5;
+  --fs-surface: #ffffff;
+  --fs-bg: #f8f9ff;
+  --fs-border: #e5e7eb;
+  --fs-text: #111827;
+  --fs-muted: #6b7280;
+  --fs-danger: #ef4444;
+  --fs-radius: 14px;
+  --fs-shadow: 0 8px 32px rgba(99,102,241,0.10), 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.fs-mobile-btn-wrap {
+  display: block;
+  padding: 12px 16px;
+}
+
+@media (min-width: 1024px) {
+  .fs-mobile-btn-wrap {
+    display: none;
+  }
+}
+
+.fs-mobile-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--fs-accent);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 12px rgba(99,102,241,0.30);
+  transition: background 0.18s, transform 0.15s;
+}
+
+.fs-mobile-btn:hover {
+  background: var(--fs-accent-hover);
+  transform: translateY(-1px);
+}
+
+.fs-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.40);
+  z-index: 40;
+}
+
+.fs-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 288px;
+  background: var(--fs-surface);
+  box-shadow: var(--fs-shadow);
+  padding: 24px 20px;
+  z-index: 50;
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow-y: auto;
+  font-family: 'Outfit', sans-serif;
+  margin-top: 20px;
+}
+
+.fs-sidebar.fs-open {
+  transform: translateX(0);
+}
+
+@media (min-width: 1024px) {
+  .fs-sidebar {
+    position: static;
+    transform: none !important;
+    box-shadow: var(--fs-shadow);
+    border-radius: var(--fs-radius);
+    height: auto;
+    margin-top: 20px;
+  }
+}
+
+.fs-mobile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 1024px) {
+  .fs-mobile-header {
+    display: none;
+  }
+}
+
+.fs-close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--fs-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 6px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.fs-close-btn:hover {
+  background: #f3f4f6;
+  color: var(--fs-text);
+}
+
+.fs-desktop-title {
+  display: none;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 1024px) {
+  .fs-desktop-title {
+    display: block;
+  }
+}
+
+.fs-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--fs-text);
+  letter-spacing: -0.01em;
+}
+
+.fs-section {
+  margin-bottom: 24px;
+}
+
+.fs-section-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fs-accent);
+  margin-bottom: 10px;
+}
+
+.fs-checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.fs-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--fs-text);
+  padding: 7px 10px;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+
+.fs-checkbox-label:hover {
+  background: var(--fs-accent-light);
+}
+
+.fs-checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--fs-accent);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.fs-divider {
+  border: none;
+  border-top: 1px solid var(--fs-border);
+  margin: 20px 0;
+}
+
+.fs-range-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.fs-range {
+  width: 100%;
+  accent-color: var(--fs-accent);
+  cursor: pointer;
+  height: 4px;
+}
+
+.fs-range-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--fs-muted);
+  font-weight: 500;
+}
+
+.fs-price-value {
+  color: var(--fs-accent);
+  font-weight: 600;
+}
+
+.fs-reset-btn {
+  width: 100%;
+  padding: 10px;
+  border: 1.5px solid var(--fs-border);
+  background: transparent;
+  border-radius: 10px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--fs-muted);
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, border-color 0.18s;
+  letter-spacing: 0.02em;
+}
+
+.fs-reset-btn:hover {
+  background: #fee2e2;
+  color: var(--fs-danger);
+  border-color: #fca5a5;
+}
+
+.fs-select-trigger {
+  width: 100%;
+  max-width: 192px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+}
