@@ -13,11 +13,12 @@ const Error = ({ title: propTitle, message: propMessage, code: propCode }) => {
     code: reduxCode,
   } = useSelector((state) => state.error);
 
-  const title = reduxTitle || propTitle;
-  const message = reduxMessage || propMessage;
-  const code = reduxCode || propCode;
-
-  if (!title) return null;
+  const title = reduxTitle || propTitle || "Something Went Wrong";
+  const message =
+    reduxMessage ||
+    propMessage ||
+    "An unexpected error occurred.";
+  const code = reduxCode || propCode || 500;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 via-white to-orange-50 px-4 py-10">
@@ -51,6 +52,7 @@ const Error = ({ title: propTitle, message: propMessage, code: propCode }) => {
             <Home className="w-4 h-4" />
             Go Home
           </button>
+
           <button
             onClick={() => window.location.reload()}
             className="flex items-center gap-2 bg-white hover:bg-gray-50 text-gray-700 px-6 py-2.5 rounded-xl font-semibold text-sm border border-gray-200 transition-colors cursor-pointer w-full sm:w-auto justify-center"

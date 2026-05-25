@@ -26,7 +26,7 @@ export function Login() {
     }
     try {
       setLoading(true);
-      const res = await api.post(`${API_URL}/api/v1/user/login`, formData, {
+      const res = await api.post(`/api/v1/user/login`, formData, {
         headers: { "Content-type": "application/json" },
       });
       if (res.data.success) {

@@ -186,7 +186,7 @@ export default function ChatAI() {
   useEffect(() => {
     const fetchFilters = async () => {
       try {
-        const res = await fetch(`${API_URL}/api/v1/products`);
+        const res = await fetch(`${API_URL}/api/v1/product/all-products`);
         const data = await res.json();
         const products = data.products || data || [];
         const categories = [...new Set(products.map((p) => p.category).filter(Boolean))];
