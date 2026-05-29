@@ -17,7 +17,8 @@ import Products from "./pages/Products";
 import ProductPage from "./pages/ProductPage";
 import Cart from "./pages/Cart";
 import ChatAI from "./pages/ChatAI";
-import FloatingAIButton from "./components/FloatingAIButton";
+import Reverify from "./pages/Reverify";
+import AddProduct from "./pages/AddProduct";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,14 @@ const router = createBrowserRouter([
   {
     path: "/verify",
     element: <Verify />,
+  },
+  {
+    path: "/addProduct",
+    element: <AddProduct />,
+  },
+  {
+    path: "/re-verify",
+    element: <Reverify />,
   },
   {
     path: "/verify/:token",

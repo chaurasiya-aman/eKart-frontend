@@ -14,7 +14,6 @@ export function Login() {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({ email: "", password: "" });
 
-  const API_URL = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -26,6 +25,7 @@ export function Login() {
     }
     try {
       setLoading(true);
+      localStorage.setItem("userEmail", formData.email);
       const res = await api.post(`/api/v1/user/login`, formData, {
         headers: { "Content-type": "application/json" },
       });
@@ -40,7 +40,7 @@ export function Login() {
             email: res.data.user.email,
             role: res.data.user.role,
             isVerified: res.data.user.isVerified,
-          })
+          }),
         );
         toast.success("Logged In Successfully");
         setTimeout(() => toast.success(res.data.message), 1000);
@@ -48,14 +48,28 @@ export function Login() {
         setFormData({ email: "", password: "" });
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Login failed");
+      console.error(error);
+
+      const message = error?.response?.data?.message || "Login failed";
+
+      toast.error(message);
+
+      if (message === "User does not exist") {
+        navigate("/signup");
+      }
+      if (message === "Please verify your account first") {
+        navigate("/re-verify");
+      }
     } finally {
       setLoading(false);
     }
   };
 
   const inputHandler = (event) => {
-    setFormData((prev) => ({ ...prev, [event.target.name]: event.target.value }));
+    setFormData((prev) => ({
+      ...prev,
+      [event.target.name]: event.target.value,
+    }));
   };
 
   return (
@@ -68,13 +82,18 @@ export function Login() {
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight">
             Welcome back
           </h1>
-          <p className="text-gray-500 text-sm mt-1.5">Sign in to your eKart account</p>
+          <p className="text-gray-500 text-sm mt-1.5">
+            Sign in to your eKart account
+          </p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8">
           <form onSubmit={formHandler} noValidate className="space-y-5">
             <div className="space-y-1.5">
-              <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+              <Label
+                htmlFor="email"
+                className="text-sm font-medium text-gray-700"
+              >
                 Email address
               </Label>
               <Input
@@ -91,10 +110,16 @@ export function Login() {
 
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <Label htmlFor="password" className="text-sm font-medium text-gray-700">
+                <Label
+                  htmlFor="password"
+                  className="text-sm font-medium text-gray-700"
+                >
                   Password
                 </Label>
-                <Link to="/forgot-password" className="text-xs text-blue-600 hover:underline">
+                <Link
+                  to="/forgot-password"
+                  className="text-xs text-blue-600 hover:underline"
+                >
                   Forgot password?
                 </Link>
               </div>
@@ -114,7 +139,11 @@ export function Login() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPassword ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
                 </button>
               </div>
             </div>
@@ -124,20 +153,30 @@ export function Login() {
               disabled={loading}
               className="w-full h-11 rounded-xl bg-gray-900 hover:bg-gray-700 text-white font-semibold text-sm cursor-pointer mt-2"
             >
-              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Sign In"}
+              {loading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                "Sign In"
+              )}
             </Button>
           </form>
 
           <p className="text-center text-sm text-gray-500 mt-5">
             Don't have an account?{" "}
-            <Link to="/signup" className="text-blue-600 font-medium hover:underline">
+            <Link
+              to="/signup"
+              className="text-blue-600 font-medium hover:underline"
+            >
               Sign Up
             </Link>
           </p>
         </div>
 
         <div className="text-center mt-5">
-          <Link to="/" className="text-xs text-gray-400 hover:text-gray-600 hover:underline transition-colors">
+          <Link
+            to="/"
+            className="text-xs text-gray-400 hover:text-gray-600 hover:underline transition-colors"
+          >
             ← Back to Home
           </Link>
         </div>

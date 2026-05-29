@@ -1,0 +1,142 @@
+/* ReVerify.css — mirrors the structure of Verify.css */
+
+.reverify-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9fafb;
+  padding: 1rem;
+}
+
+.reverify-card {
+  width: 100%;
+  max-width: 460px;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+  background-color: #ffffff;
+}
+
+.reverify-card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem 2rem 1rem;
+  gap: 0.75rem;
+}
+
+.reverify-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: #eff6ff;
+  margin-bottom: 0.25rem;
+}
+
+.reverify-icon {
+  width: 30px;
+  height: 30px;
+  color: #3b82f6;
+}
+
+.reverify-title {
+  font-size: 1.375rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.reverify-desc {
+  font-size: 0.9rem;
+  color: #6b7280;
+  line-height: 1.65;
+}
+
+.reverify-card-content {
+  padding: 0 2rem;
+  min-height: 0;
+}
+
+.reverify-success-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #f0fdf4;
+  color: #16a34a;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  padding: 0.65rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.reverify-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 2rem 2rem;
+}
+
+/* Resend button */
+.reverify-resend-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.65rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, opacity 0.2s;
+  border: none;
+  background-color: #3b82f6;
+  color: #ffffff;
+}
+
+.reverify-resend-btn:hover:not(:disabled) {
+  background-color: #2563eb;
+}
+
+.reverify-resend-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.reverify-resend-btn.sent {
+  background-color: #22c55e;
+}
+
+.reverify-resend-icon {
+  flex-shrink: 0;
+  transition: transform 0.3s;
+}
+
+.reverify-resend-icon.spin {
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Back to login link */
+.reverify-back-link {
+  font-size: 0.85rem;
+  color: #6b7280;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.reverify-back-link:hover {
+  color: #111827;
+  text-decoration: underline;
+}

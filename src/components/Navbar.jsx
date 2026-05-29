@@ -8,6 +8,8 @@ import {
   LogOut,
   Package,
   Home,
+  PackagePlus,
+  SquarePlus,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
@@ -72,17 +74,19 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-1 sm:gap-2">
-          {isLoggedIn && <Link
-            to="/cart"
-            className="relative p-2 rounded-xl hover:bg-gray-100 transition-colors"
-          >
-            <ShoppingBag className="h-5 w-5 text-gray-700" />
-            {cartCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] h-4 w-4 rounded-full flex items-center justify-center font-bold">
-                {cartCount}
-              </span>
-            )}
-          </Link>}
+          {isLoggedIn && (
+            <Link
+              to="/cart"
+              className="relative p-2 rounded-xl hover:bg-gray-100 transition-colors"
+            >
+              <ShoppingBag className="h-5 w-5 text-gray-700" />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] h-4 w-4 rounded-full flex items-center justify-center font-bold">
+                  {cartCount}
+                </span>
+              )}
+            </Link>
+          )}
 
           <div className="hidden md:flex items-center gap-2">
             {isLoggedIn ? (
@@ -117,6 +121,14 @@ const Navbar = () => {
                     </span>
                     Orders
                   </Link>
+                  {user.role === "admin" && (
+                    <Link to="/addproduct" className="navbar-dropdown-item">
+                      <span className="navbar-dropdown-item-icon">
+                        <SquarePlus className="h-3.5 w-3.5 text-gray-500" />
+                      </span>
+                      Add products
+                    </Link>
+                  )}
                   <div
                     style={{ borderTop: "1px solid #f3f4f6", margin: "4px 0" }}
                   />
@@ -125,7 +137,7 @@ const Navbar = () => {
                     onClick={logOutHandler}
                   >
                     <span className="navbar-dropdown-logout-icon">
-                      <LogOut className="h-3.5 w-3.5 text-red-500" />
+                      <LogOut className="h-4 w-4 text-red-500" />
                     </span>
                     Logout
                   </button>
@@ -164,6 +176,14 @@ const Navbar = () => {
                   <Link to="/orders" className="navbar-mobile-item">
                     <Package className="h-4 w-4" /> Orders
                   </Link>
+                  {user.role === "admin" && (
+                    <Link to="/addproduct" className="navbar-dropdown-item">
+                      <span className="navbar-dropdown-item-icon">
+                        <SquarePlus className="h-4 w-4 text-gray-500" />
+                      </span>
+                      Add products
+                    </Link>
+                  )}
                   <div
                     style={{ borderTop: "1px solid #f3f4f6", margin: "4px 0" }}
                   />
