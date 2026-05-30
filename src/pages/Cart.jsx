@@ -20,7 +20,7 @@ export default function Cart() {
     try {
       setLoading(true);
       const res = await api.get(`${API_URL}/api/v1/cart`);
-      if (res.data.success) setItems(res.data.cart.items);
+      if (res.data.success) setItems(res.data.cart?.items || []);
     } catch (error) {
       toast.error(error?.response?.data?.message || "Failed to load cart");
     } finally {
@@ -32,7 +32,7 @@ export default function Cart() {
     getItem();
   }, []);
 
-  const count = items.reduce((acc, item) => acc + (item.quantity || 1), 0);
+  const count = (items || []).reduce((acc, item) => acc + (item.quantity || 1), 0);
 
   if (loading) {
     return (
