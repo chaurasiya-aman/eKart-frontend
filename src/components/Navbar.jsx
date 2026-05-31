@@ -176,7 +176,7 @@ const Navbar = () => {
                     <Package className="h-4 w-4" /> Orders
                   </Link>}
                   {user.role === "admin" && (
-                    <Link to="/admin/settings" className="navbar-dropdown-item">
+                    <Link to="/settings" className="navbar-dropdown-item">
                       <Settings className="h-4 w-4 text-gray-500" />
                       Settings
                     </Link>
