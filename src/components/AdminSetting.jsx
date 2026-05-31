@@ -5,12 +5,8 @@ import {
   Package,
   Settings,
   ArrowRight,
-  Plus,
-  Clock,
-  UserSearch,
-  Download,
 } from "lucide-react";
-import "@/utils/AdminSettings.css";
+import "@/utils/Adminsettings.css";
 import { Button } from "./ui/button";
 
 const CARDS = [
