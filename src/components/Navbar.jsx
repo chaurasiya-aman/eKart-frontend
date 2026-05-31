@@ -8,8 +8,9 @@ import {
   LogOut,
   Package,
   Home,
-  PackagePlus,
   SquarePlus,
+  Users,
+  Settings,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
@@ -115,18 +116,18 @@ const Navbar = () => {
                     </span>
                     Profile
                   </Link>
-                  <Link to="/orders" className="navbar-dropdown-item">
+                 { user.role !== "admin" && <Link to="/orders" className="navbar-dropdown-item">
                     <span className="navbar-dropdown-item-icon">
                       <Package className="h-3.5 w-3.5 text-gray-500" />
                     </span>
                     Orders
-                  </Link>
+                  </Link>}
                   {user.role === "admin" && (
-                    <Link to="/addproduct" className="navbar-dropdown-item">
+                    <Link to="/settings" className="navbar-dropdown-item">
                       <span className="navbar-dropdown-item-icon">
-                        <SquarePlus className="h-3.5 w-3.5 text-gray-500" />
+                        <Settings className="h-4 w-4 text-gray-500" />
                       </span>
-                      Add products
+                      Settings
                     </Link>
                   )}
                   <div
@@ -173,15 +174,13 @@ const Navbar = () => {
                   <Link to="/profile" className="navbar-mobile-item">
                     <User className="h-4 w-4" /> Profile
                   </Link>
-                  <Link to="/orders" className="navbar-mobile-item">
+                 {user.role !=="admin" && <Link to="/orders" className="navbar-mobile-item">
                     <Package className="h-4 w-4" /> Orders
-                  </Link>
+                  </Link>}
                   {user.role === "admin" && (
-                    <Link to="/addproduct" className="navbar-dropdown-item">
-                      <span className="navbar-dropdown-item-icon">
-                        <SquarePlus className="h-4 w-4 text-gray-500" />
-                      </span>
-                      Add products
+                    <Link to="/admin/settings" className="navbar-dropdown-item">
+                      <Settings className="h-4 w-4 text-gray-500" />
+                      Settings
                     </Link>
                   )}
                   <div

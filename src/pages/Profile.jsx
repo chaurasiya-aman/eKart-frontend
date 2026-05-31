@@ -252,11 +252,12 @@ const Profile = () => {
                       className="text-[13px] font-normal italic"
                       style={{ fontFamily: "'DM Sans', sans-serif" }}
                     >
-                      {profileDetails?.email || user.email}
+                      {profileDetails?.email || user.email} 
                     </CardTitle>
                     {profileDetails?.isVerified && (
                       <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
                     )}
+                    
                   </div>
 
                   <div className="profile-action-row">
@@ -293,6 +294,10 @@ const Profile = () => {
                   {infoRow(
                     "Zip Code",
                     profileDetails?.zipCode || "Not provided",
+                  )}
+                  {infoRow(
+                    "Role: ",
+                    profileDetails?.role.toUpperCase(),
                   )}
 
                   <div className="profile-section-label">About</div>

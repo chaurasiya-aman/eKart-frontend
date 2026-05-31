@@ -19,6 +19,8 @@ import Cart from "./pages/Cart";
 import ChatAI from "./pages/ChatAI";
 import Reverify from "./pages/Reverify";
 import AddProduct from "./pages/AddProduct";
+import AdminSettings from "./components/AdminSetting";
+import AllUsers from "./components/AllUsers";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +43,10 @@ const router = createBrowserRouter([
   {
     path: "/verify",
     element: <Verify />,
+  },
+  {
+    path: "/settings",
+    element: <AdminSettings />,
   },
   {
     path: "/addProduct",
@@ -68,6 +74,14 @@ const router = createBrowserRouter([
     element: (
       <>
         <ForgotPassword />
+      </>
+    ),
+  },
+  {
+    path: "/all-users",
+    element: (
+      <>
+        <AllUsers />
       </>
     ),
   },
