@@ -15,24 +15,27 @@ import api from "@/api/axios";
 export default function Reverify() {
   const [resent, setResent] = useState(false);
   const [loading, setLoading] = useState(false);
-
+  const [message, setMessage] = useState("");
   const handleResend = async () => {
     try {
       setLoading(true);
 
       const email = localStorage.getItem("userEmail");
-      console.log("Revirfy email:" , email)
+      console.log("Reverify email:", email);
 
-      await api.post(`/api/v1/user/reVerify`, { email });
+      const response = await api.post(`/api/v1/user/reVerify`, { email });
 
+      setMessage(response.data.message);
       setResent(true);
     } catch (error) {
       console.error(error);
+
+      setMessage(error.response?.data?.message || "Something went wrong");
+      setResent(false);
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <div className="reverify-page">
       <Card className="reverify-card">
@@ -52,10 +55,10 @@ export default function Reverify() {
         </CardHeader>
 
         <CardContent className="reverify-card-content">
-          {resent && (
+          {message && (
             <div className="reverify-success-banner">
-              <MailCheck size={16} />A new verification link has been sent to
-              your email.
+              <MailCheck size={16} />
+              {message}
             </div>
           )}
         </CardContent>

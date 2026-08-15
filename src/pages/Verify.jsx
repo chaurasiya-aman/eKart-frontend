@@ -36,6 +36,9 @@ export function Verify() {
             <span className="verify-waiting-dot" />
             Waiting for verification...
           </div>
+          <Link to="/re-verify" className="verify-back-link">
+            Resend Email
+          </Link>
 
           <Link to="/login" className="verify-back-link">
             Back to Login

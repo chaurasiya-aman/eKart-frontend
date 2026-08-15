@@ -14,15 +14,36 @@ function fmt(n) {
 export default function Cart() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+
   const API_URL = import.meta.env.VITE_API_URL;
 
+  // Fetch cart from backend
   const getItem = async () => {
     try {
       setLoading(true);
-      const res = await api.get(`${API_URL}/api/v1/cart`);
-      if (res.data.success) setItems(res.data.cart?.items || []);
+
+      const res = await api.get(
+        `${API_URL}/api/v1/cart`
+      );
+
+      if (res.data.success) {
+        const cartItems =
+          res.data.cart?.items || [];
+
+        // Only keep valid cart items
+        const validItems = cartItems.filter(
+          (item) =>
+            item &&
+            item.productId
+        );
+
+        setItems(validItems);
+      }
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Failed to load cart");
+      toast.error(
+        error?.response?.data?.message ||
+          "Failed to load cart"
+      );
     } finally {
       setLoading(false);
     }
@@ -32,7 +53,11 @@ export default function Cart() {
     getItem();
   }, []);
 
-  const count = (items || []).reduce((acc, item) => acc + (item.quantity || 1), 0);
+  const count = items.reduce(
+    (acc, item) =>
+      acc + (item.quantity || 1),
+    0
+  );
 
   if (loading) {
     return (
@@ -44,35 +69,56 @@ export default function Cart() {
 
   return (
     <div className="cart-wrap">
+
+      {/* HEADER */}
       <div className="cart-header">
-        <h1 className="cart-h1">Your Cart</h1>
+        <h1 className="cart-h1">
+          Your Cart
+        </h1>
+
         <p className="cart-subtext">
-          {count} {count === 1 ? "item" : "items"} in your bag
+          {count}{" "}
+          {count === 1 ? "item" : "items"} in your bag
         </p>
       </div>
 
+      {/* FREE DELIVERY */}
       {items.length > 0 && (
         <div className="cart-savings-banner">
           <div className="cart-savings-dot" />
+
           🎉 Free delivery applied on your order!
         </div>
       )}
 
       <div className="cart-layout">
+
+        {/* CART ITEMS */}
         <div className="cart-items-list">
+
           {items.length === 0 ? (
             <div className="cart-empty">
+
               <ShoppingBag className="w-12 h-12 mx-auto mb-3 text-gray-200" />
-              <p className="font-semibold text-gray-400 text-base">Your cart is empty</p>
-              <p className="text-xs mt-1 text-gray-300 mb-4">Looks like you haven't added anything yet</p>
+
+              <p className="font-semibold text-gray-400 text-base">
+                Your cart is empty
+              </p>
+
+              <p className="text-xs mt-1 text-gray-300 mb-4">
+                Looks like you haven't added anything yet
+              </p>
+
               <Link
                 to="/products"
                 className="inline-block bg-gray-900 text-white text-xs font-semibold px-5 py-2.5 rounded-xl hover:bg-blue-600 transition-colors"
               >
                 Browse Products
               </Link>
+
             </div>
           ) : (
+
             items.map((item) => (
               <CartItem
                 key={item._id}
@@ -82,10 +128,19 @@ export default function Cart() {
                 fmt={fmt}
               />
             ))
+
           )}
+
         </div>
 
-        {items.length > 0 && <OrderCard fmt={fmt} items={items} />}
+        {/* ORDER SUMMARY */}
+        {items.length > 0 && (
+          <OrderCard
+            fmt={fmt}
+            items={items}
+          />
+        )}
+
       </div>
     </div>
   );
