@@ -22,7 +22,6 @@ export default function ProductDetails({ product }) {
 
   const [addingToCart, setAddingToCart] = useState(false);
 
-  // Current quantity of this product in cart
   const [qty, setQty] = useState(0);
 
   const navigate = useNavigate();
@@ -31,9 +30,6 @@ export default function ProductDetails({ product }) {
 
   const API_URL = import.meta.env.VITE_API_URL;
 
-  // --------------------------------------------------
-  // GET CURRENT CART QUANTITY
-  // --------------------------------------------------
 
   useEffect(() => {
     const fetchCartQuantity = async () => {
@@ -75,9 +71,6 @@ export default function ProductDetails({ product }) {
     }
   }, [product?._id, API_URL]);
 
-  // --------------------------------------------------
-  // ADD TO CART
-  // --------------------------------------------------
 
   const handleAddToCart = async () => {
     try {
@@ -112,20 +105,14 @@ export default function ProductDetails({ product }) {
     }
   };
 
-  // --------------------------------------------------
-  // CHANGE QUANTITY
-  // --------------------------------------------------
 
   const changeQty = async (delta) => {
     const newQty = qty + delta;
 
-    // Don't allow negative quantity
     if (newQty < 0) {
       return;
     }
 
-    // If quantity becomes 0,
-    // remove product from cart
     if (newQty === 0) {
       await handleRemoveFromCart();
       return;
@@ -151,7 +138,6 @@ export default function ProductDetails({ product }) {
       );
 
       if (res.data.success) {
-        // Get updated quantity from backend
         const updatedItems =
           res.data.cart?.items || [];
 
@@ -180,9 +166,6 @@ export default function ProductDetails({ product }) {
     }
   };
 
-  // --------------------------------------------------
-  // REMOVE FROM CART
-  // --------------------------------------------------
 
   const handleRemoveFromCart = async () => {
     try {
@@ -213,41 +196,10 @@ export default function ProductDetails({ product }) {
     }
   };
 
-  // --------------------------------------------------
-  // BUY NOW
-  // --------------------------------------------------
 
   const handleBuyNow = async () => {
-    try {
-      setAddingToCart(true);
-
-      const res = await api.post(
-        `${API_URL}/api/v1/cart/add`,
-        {
-          productId: product._id,
-          quantity: 1,
-        },
-        {
-          withCredentials: true,
-        }
-      );
-
-      if (res.data.success) {
-        navigate("/cart");
-      }
-    } catch (error) {
-      toast.error(
-        error?.response?.data?.message ||
-          "Failed to add product to cart"
-      );
-    } finally {
-      setAddingToCart(false);
-    }
+    navigate("/cart");
   };
-
-  // --------------------------------------------------
-  // DELETE PRODUCT - ADMIN
-  // --------------------------------------------------
 
   const handleDelete = async (id) => {
     try {
@@ -281,9 +233,6 @@ export default function ProductDetails({ product }) {
   const isDefault =
     mainImage === defaultImage;
 
-  // --------------------------------------------------
-  // PRODUCT NOT FOUND
-  // --------------------------------------------------
 
   if (!product) {
     return (
@@ -293,16 +242,11 @@ export default function ProductDetails({ product }) {
     );
   }
 
-  // --------------------------------------------------
-  // UI
-  // --------------------------------------------------
-
   return (
     <div className="min-h-screen bg-gray-50">
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
 
-        {/* BACK BUTTON */}
 
         <button
           onClick={() => navigate(-1)}
@@ -317,13 +261,9 @@ export default function ProductDetails({ product }) {
 
           <div className="grid grid-cols-1 md:grid-cols-2">
 
-            {/* ================================================= */}
-            {/* LEFT SIDE - PRODUCT IMAGES */}
-            {/* ================================================= */}
 
             <div className="p-5 sm:p-8 bg-gray-50 border-b md:border-b-0 md:border-r border-gray-100 flex flex-col gap-4">
 
-              {/* MAIN IMAGE */}
 
               <div className="rounded-2xl overflow-hidden bg-white flex items-center justify-center h-56 sm:h-72 md:h-80 shadow-inner">
 
@@ -339,7 +279,6 @@ export default function ProductDetails({ product }) {
 
               </div>
 
-              {/* THUMBNAILS */}
 
               {product.productImage?.length >
                 1 && (
@@ -374,7 +313,6 @@ export default function ProductDetails({ product }) {
 
                   </div>
 
-                  {/* RESET IMAGE */}
 
                   {!isDefault && (
                     <button
@@ -399,13 +337,9 @@ export default function ProductDetails({ product }) {
 
             </div>
 
-            {/* ================================================= */}
-            {/* RIGHT SIDE - PRODUCT DETAILS */}
-            {/* ================================================= */}
 
             <div className="p-5 sm:p-8 flex flex-col gap-4">
 
-              {/* CATEGORY + BRAND */}
 
               <div className="flex flex-wrap gap-2">
 
@@ -419,19 +353,16 @@ export default function ProductDetails({ product }) {
 
               </div>
 
-              {/* NAME */}
 
               <h1 className="text-xl sm:text-2xl font-bold text-gray-900 leading-snug">
                 {product.productName}
               </h1>
 
-              {/* DESCRIPTION */}
 
               <p className="text-gray-500 text-sm leading-relaxed">
                 {product.productDescription}
               </p>
 
-              {/* PRICE */}
 
               <div className="flex items-baseline gap-3">
 
@@ -444,15 +375,9 @@ export default function ProductDetails({ product }) {
 
               </div>
 
-              {/* ================================================= */}
-              {/* CART + BUY NOW */}
-              {/* ================================================= */}
 
               <div className="flex flex-col sm:flex-row gap-3 mt-1">
 
-                {/* ============================================= */}
-                {/* ADD TO CART / QUANTITY */}
-                {/* ============================================= */}
 
                 {qty === 0 ? (
 
@@ -482,7 +407,6 @@ export default function ProductDetails({ product }) {
 
                   <div className="flex-1 flex items-center justify-between bg-blue-600 text-white py-3 px-4 rounded-xl">
 
-                    {/* MINUS */}
 
                     <button
                       type="button"
@@ -499,13 +423,11 @@ export default function ProductDetails({ product }) {
                       )}
                     </button>
 
-                    {/* QUANTITY */}
 
                     <span className="text-sm font-bold">
                       {qty}
                     </span>
 
-                    {/* PLUS */}
 
                     <button
                       type="button"
@@ -525,10 +447,6 @@ export default function ProductDetails({ product }) {
                   </div>
                 )}
 
-                {/* ============================================= */}
-                {/* BUY NOW */}
-                {/* ============================================= */}
-
                 <button
                   type="button"
                   onClick={handleBuyNow}
@@ -542,9 +460,6 @@ export default function ProductDetails({ product }) {
 
               </div>
 
-              {/* ================================================= */}
-              {/* ADMIN DELETE */}
-              {/* ================================================= */}
 
               {user?.role === "admin" && (
                 <button
@@ -576,9 +491,6 @@ export default function ProductDetails({ product }) {
                 </button>
               )}
 
-              {/* ================================================= */}
-              {/* FEATURES */}
-              {/* ================================================= */}
 
               <div className="mt-2 pt-4 border-t border-gray-100 grid grid-cols-1 gap-2.5">
 
