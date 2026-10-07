@@ -9,6 +9,8 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
+  if (config.skipGlobalLoading) return config;
+
   config.__globalLoadingTracked = true;
   store.dispatch(requestStarted());
   return config;

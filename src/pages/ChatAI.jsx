@@ -185,7 +185,7 @@ export default function ChatAI() {
   useEffect(() => {
     const fetchFilters = async () => {
       try {
-        const res = await api.get("/api/v1/product/all-products");
+        const res = await api.get("/api/v1/product/all-products", { skipGlobalLoading: true });
         const data = res.data;
         const products = data.products || data || [];
         const categories = [...new Set(products.map((p) => p.category).filter(Boolean))];
@@ -243,7 +243,7 @@ export default function ChatAI() {
       const res = await api.post(
         "/api/v1/chat/ai",
         { prompt: trimmed, conversationHistory: historyToSend },
-        { signal: controller.signal },
+        { signal: controller.signal, skipGlobalLoading: true },
       );
       const data = res.data;
 
