@@ -1,6 +1,8 @@
 import { ShieldCheck, Tag } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function OrderCard({ fmt, items }) {
+  const navigate = useNavigate();
   const subtotal = items.reduce(
     (acc, item) => acc + item.productId.productPrice * item.quantity,
     0
@@ -39,7 +41,7 @@ export default function OrderCard({ fmt, items }) {
         </p>
       </div>
 
-      <button className="order-checkout-btn">
+      <button className="order-checkout-btn" onClick={() => navigate("/checkout")}>
         Proceed to Checkout →
       </button>
 

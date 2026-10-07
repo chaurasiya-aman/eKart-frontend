@@ -18,11 +18,15 @@ import Error from "./pages/Error";
 import Products from "./pages/Products";
 import ProductPage from "./pages/ProductPage";
 import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import OrderPlaced from "./pages/OrderPlaced";
 import ChatAI from "./pages/ChatAI";
 import Reverify from "./pages/Reverify";
 import AddProduct from "./pages/AddProduct";
 import AdminSettings from "./components/AdminSetting";
 import AllUsers from "./components/AllUsers";
+import AdminRoute from "./components/AdminRoute";
+import OrdersPage from "./pages/OrdersPage";
 
 const router = createBrowserRouter([
   {
@@ -51,7 +55,7 @@ const router = createBrowserRouter([
     element: (
       <>
         <Navbar />
-        <AdminSettings />
+        <AdminRoute><AdminSettings /></AdminRoute>
       </>
     ),
   },
@@ -60,7 +64,7 @@ const router = createBrowserRouter([
     element: (
       <>
         <Navbar />
-        <AddProduct />
+        <AdminRoute><AddProduct /></AdminRoute>
       </>
     ),
   },
@@ -94,7 +98,7 @@ const router = createBrowserRouter([
     element: (
       <>
         <Navbar />
-        <AllUsers />
+        <AdminRoute><AllUsers /></AdminRoute>
       </>
     ),
   },
@@ -121,6 +125,33 @@ const router = createBrowserRouter([
       <>
         <Navbar />
         <Cart />
+      </>
+    ),
+  },
+  {
+    path: "/orders",
+    element: (
+      <>
+        <Navbar />
+        <OrdersPage />
+      </>
+    ),
+  },
+  {
+    path: "/checkout",
+    element: (
+      <>
+        <Navbar />
+        <Checkout />
+      </>
+    ),
+  },
+  {
+    path: "/order-placed",
+    element: (
+      <>
+        <Navbar />
+        <OrderPlaced />
       </>
     ),
   },

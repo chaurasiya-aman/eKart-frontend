@@ -1,0 +1,123 @@
+.order-placed-page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 104px 16px 48px;
+  background: radial-gradient(circle at 50% 30%, #eef2ff 0, #f8fafc 42%, #f8fafc 100%);
+  color: #111827;
+}
+.order-placed-card {
+  width: min(100%, 540px);
+  padding: clamp(24px, 6vw, 44px);
+  border: 1px solid #e5e7eb;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 20px 60px rgb(15 23 42 / 9%);
+  text-align: center;
+  animation: order-card-enter 550ms cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes order-card-enter {
+  from { opacity: 0; transform: translateY(18px) scale(.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.order-placed-animation {
+  position: relative;
+  display: grid;
+  width: 112px;
+  height: 112px;
+  margin: 0 auto 18px;
+  place-items: center;
+}
+.order-placed-ring {
+  position: absolute;
+  inset: 5px;
+  border: 2px solid #bbf7d0;
+  border-radius: 50%;
+  animation: order-ring-in 650ms ease-out both;
+}
+@keyframes order-ring-in {
+  from { opacity: 0; transform: scale(.45); }
+  to { opacity: 1; transform: scale(1); }
+}
+.order-placed-icon {
+  display: grid;
+  width: 76px;
+  height: 76px;
+  place-items: center;
+  border-radius: 50%;
+  background: #16a34a;
+  color: #fff;
+  box-shadow: 0 10px 24px rgb(22 163 74 / 25%);
+  animation: order-check-pop 500ms 180ms cubic-bezier(.2,1.4,.5,1) both;
+}
+@keyframes order-check-pop {
+  from { opacity: 0; transform: scale(.25) rotate(-18deg); }
+  to { opacity: 1; transform: scale(1) rotate(0); }
+}
+.order-placed-icon svg { width: 38px; height: 38px; stroke-width: 3; }
+.order-placed-spark {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
+  background: #818cf8;
+  animation: order-spark 900ms ease-out both;
+}
+.order-placed-spark--one { top: 10px; right: 16px; }
+.order-placed-spark--two { top: 34px; left: 2px; background: #fbbf24; animation-delay: 100ms; }
+.order-placed-spark--three { right: 2px; bottom: 18px; background: #fb7185; animation-delay: 180ms; }
+@keyframes order-spark {
+  0% { opacity: 0; transform: scale(.2) rotate(0); }
+  45% { opacity: 1; transform: scale(1.25) rotate(90deg); }
+  100% { opacity: .75; transform: scale(1) rotate(180deg); }
+}
+.order-placed-eyebrow {
+  margin: 0 0 7px;
+  color: #4f46e5;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+}
+.order-placed-card h1 { margin: 0; font-size: clamp(30px, 7vw, 40px); letter-spacing: -.04em; }
+.order-placed-message { max-width: 390px; margin: 10px auto 22px; color: #6b7280; font-size: 14px; line-height: 1.65; }
+.order-placed-reference {
+  display: grid;
+  gap: 5px;
+  padding: 13px;
+  border: 1px dashed #c7d2fe;
+  border-radius: 13px;
+  background: #f5f7ff;
+}
+.order-placed-reference span, .order-placed-details span { color: #6b7280; font-size: 12px; }
+.order-placed-reference strong { color: #3730a3; font-size: 14px; overflow-wrap: anywhere; }
+.order-placed-details { display: grid; gap: 12px; margin: 20px 0; text-align: left; }
+.order-placed-details > div { display: flex; justify-content: space-between; gap: 12px; }
+.order-placed-details strong { color: #1f2937; font-size: 13px; text-align: right; }
+.order-placed-notice { padding: 11px 12px; border-radius: 11px; background: #fffbeb; color: #92400e; font-size: 12px; line-height: 1.5; }
+.order-placed-primary {
+  display: flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 20px;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: #111827;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 150ms ease;
+}
+.order-placed-primary:hover { background: #3730a3; }
+.order-placed-primary svg { width: 17px; height: 17px; }
+.order-placed-secondary { display: inline-block; margin-top: 14px; color: #6b7280; font-size: 13px; font-weight: 600; text-decoration: none; }
+.order-placed-secondary:hover { color: #3730a3; }
+.order-placed-card--missing > svg { width: 42px; height: 42px; margin-bottom: 12px; color: #6366f1; }
+.order-placed-card--missing p { color: #6b7280; line-height: 1.6; }
+@media (prefers-reduced-motion: reduce) {
+  .order-placed-card, .order-placed-ring, .order-placed-icon, .order-placed-spark { animation-duration: .01ms; animation-iteration-count: 1; }
+}
