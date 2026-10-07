@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "@/api/axios";
 import "@/utils/ChatAI.css";
 
 const NOVA_GREETING = {
@@ -181,13 +182,11 @@ export default function ChatAI() {
   const inputRef    = useRef(null);
   const navigate    = useNavigate();
 
-  const API_URL = import.meta.env.VITE_API_URL;
-
   useEffect(() => {
     const fetchFilters = async () => {
       try {
-        const res = await fetch(`${API_URL}/api/v1/product/all-products`);
-        const data = await res.json();
+        const res = await api.get("/api/v1/product/all-products");
+        const data = res.data;
         const products = data.products || data || [];
         const categories = [...new Set(products.map((p) => p.category).filter(Boolean))];
         const brands     = [...new Set(products.map((p) => p.brand).filter(Boolean))];
@@ -241,14 +240,12 @@ export default function ChatAI() {
           content: t,
         }));
 
-      const res = await fetch(`${API_URL}/api/v1/chat/ai`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ prompt: trimmed, conversationHistory: historyToSend }),
-        signal: controller.signal,
-      });
-
-      const data = await res.json();
+      const res = await api.post(
+        "/api/v1/chat/ai",
+        { prompt: trimmed, conversationHistory: historyToSend },
+        { signal: controller.signal },
+      );
+      const data = res.data;
 
       if (updated.length > 40) {
         setMessages((prev) => [

@@ -1,5 +1,5 @@
 .admin-settings {
-  padding: 1.5rem;
+  padding: 5.5rem 1rem 1.5rem;
   width: 100%;
   min-height: 100vh;
   margin: 0 auto;
@@ -29,6 +29,11 @@
 }
 
 @media (min-width: 640px) {
+  .admin-settings {
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
+  }
+
   .admin-settings__grid {
     grid-template-columns: repeat(2, 1fr);
   }

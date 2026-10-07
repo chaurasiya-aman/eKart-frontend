@@ -19,7 +19,7 @@ export function Home() {
   return (
     <div>
       {showNotice && (
-        <div className="fixed top-0 left-0 w-full bg-yellow-300 text-black px-3 py-2 sm:py-3 text-center z-50 shadow-md text-xs sm:text-sm flex items-center justify-center flex-wrap gap-2">
+        <div className="fixed top-16 left-0 w-full bg-yellow-300 text-black px-3 py-2 sm:py-3 text-center z-50 shadow-md text-xs sm:text-sm flex items-center justify-center flex-wrap gap-2">
           <span>
             ⚠️ This project is hosted on a free server. It may take 30–60 seconds
             to start on first request.

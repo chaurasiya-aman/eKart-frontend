@@ -7,6 +7,8 @@ import { Login } from "./pages/Login";
 import { Verify } from "./pages/Verify";
 import { VerifyEmail } from "./pages/VerifyEmail";
 import { Toaster } from "./components/ui/sonner";
+import GlobalErrorModal from "./components/GlobalErrorModal";
+import GlobalLoadingOverlay from "./components/GlobalLoadingOverlay";
 import Profile from "./pages/Profile";
 import Navbar from "./components/Navbar";
 import ForgotPassword from "./pages/ForgotPassword";
@@ -46,11 +48,21 @@ const router = createBrowserRouter([
   },
   {
     path: "/settings",
-    element: <AdminSettings />,
+    element: (
+      <>
+        <Navbar />
+        <AdminSettings />
+      </>
+    ),
   },
   {
-    path: "/addProduct",
-    element: <AddProduct />,
+    path: "/addproduct",
+    element: (
+      <>
+        <Navbar />
+        <AddProduct />
+      </>
+    ),
   },
   {
     path: "/re-verify",
@@ -81,6 +93,7 @@ const router = createBrowserRouter([
     path: "/all-users",
     element: (
       <>
+        <Navbar />
         <AllUsers />
       </>
     ),
@@ -153,6 +166,8 @@ function App() {
     <>
       <RouterProvider router={router} />
       <Toaster richColors position="top-center" />
+      <GlobalLoadingOverlay />
+      <GlobalErrorModal />
     </>
   );
 }

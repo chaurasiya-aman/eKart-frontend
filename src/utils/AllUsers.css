@@ -1,5 +1,5 @@
 .all-users {
-  padding: 1.5rem;
+  padding: 5.5rem 1rem 1.5rem;
   width: 100%;
   min-height: 100vh;
   margin: 0 auto;
@@ -98,11 +98,13 @@
 .all-users__table-wrap {
   border: 1px solid #ddd8f5;
   border-radius: 0.75rem;
-  overflow: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .all-users__table {
   width: 100%;
+  min-width: 560px;
   border-collapse: collapse;
   font-size: 0.875rem;
 }

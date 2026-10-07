@@ -154,6 +154,12 @@
   background: #f9fafb;
 }
 
+.navbar-mobile-search {
+  padding: 4px;
+  border-bottom: 1px solid #f3f4f6;
+  margin-bottom: 4px;
+}
+
 .navbar-mobile-logout {
   display: flex;
   align-items: center;

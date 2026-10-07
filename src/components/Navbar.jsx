@@ -1,16 +1,16 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import {
   ShoppingCart,
   ShoppingBag,
   User,
-  Search,
   Menu,
   LogOut,
   Package,
   Home,
   Settings,
 } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import ProductSearch from "@/components/ProductSearch";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,6 +29,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL;
   const cartCount = 0;
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const logOutHandler = async () => {
     try {
@@ -64,13 +65,9 @@ const Navbar = () => {
           </span>
         </Link>
 
-        <div className="hidden md:flex flex-1 max-w-xs lg:max-w-sm relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
-          <Input
-            placeholder="Search products..."
-            className="pl-9 bg-gray-50 border-gray-200 rounded-xl text-sm focus:bg-white"
-          />
-        </div>
+        {isLoggedIn && (
+          <ProductSearch className="product-search--desktop flex-1" />
+        )}
 
         <div className="flex items-center gap-1 sm:gap-2">
           {isLoggedIn && (
@@ -154,7 +151,7 @@ const Navbar = () => {
             )}
           </div>
 
-          <DropdownMenu modal={false}>
+          <DropdownMenu modal={false} open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <DropdownMenuTrigger asChild className="md:hidden">
               <button className="p-2 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer">
                 <Menu className="h-5 w-5 text-gray-700" />
@@ -166,6 +163,12 @@ const Navbar = () => {
             >
               {isLoggedIn ? (
                 <>
+                  <div className="navbar-mobile-search">
+                    <ProductSearch
+                      className="product-search--mobile"
+                      onSearchComplete={() => setMobileMenuOpen(false)}
+                    />
+                  </div>
                   <Link to="/cart" className="navbar-mobile-item">
                     <ShoppingBag className="h-4 w-4" /> Cart
                   </Link>

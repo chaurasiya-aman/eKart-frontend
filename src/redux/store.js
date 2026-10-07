@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./userSlice";
 import errorReducer from "./errorSlice";
 import productReducer from "./productSlice";
+import loadingReducer from "./loadingSlice";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import {
@@ -25,6 +26,7 @@ const store = configureStore({
     user: persistedUserReducer,
     error: errorReducer,
     product: productReducer,
+    loading: loadingReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

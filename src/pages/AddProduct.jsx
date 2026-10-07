@@ -69,7 +69,7 @@ export default function AddProduct() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 pt-20 pb-8">
       <div className="w-full max-w-2xl bg-white rounded-2xl shadow-md p-5 sm:p-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-center mb-6">
           Add Product

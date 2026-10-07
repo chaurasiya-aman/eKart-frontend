@@ -20,7 +20,7 @@ export function Login() {
   const formHandler = async (event) => {
     event.preventDefault();
     if (!formData.email.trim() || !formData.password.trim()) {
-      toast.error("All fields are required");
+      toast.error("Enter your email and password to continue.");
       return;
     }
     try {
@@ -50,11 +50,19 @@ export function Login() {
     } catch (error) {
       console.error(error);
 
-      const message = error?.response?.data?.message || "Login failed";
+      const status = error?.response?.status;
+      const message =
+        error?.response?.data?.message ||
+        (status === 401
+          ? "Incorrect password. Please try again."
+          : "We couldn't sign you in. Please try again.");
 
-      toast.error(message);
+      toast.error(message, {
+        description:
+          status === 404 ? "Create an account to start shopping." : undefined,
+      });
 
-      if (message === "User does not exist") {
+      if (status === 404) {
         navigate("/signup");
       }
       if (message === "Please verify your account first") {

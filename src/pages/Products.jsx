@@ -5,7 +5,7 @@ import { setProducts } from "@/redux/productSlice";
 import { Loader2, PackageSearch } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 
 export default function Products() {
@@ -14,6 +14,8 @@ export default function Products() {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const searchQuery = (searchParams.get("search") || "").trim().toLowerCase();
 
   const [filter, setFilter] = useState({
     categories: [],
@@ -37,12 +39,22 @@ export default function Products() {
   };
 
   const filteredProducts = product.filter((p) => {
+    const searchableText = [
+      p?.productName,
+      p?.productDescription,
+      p?.brand,
+      p?.category,
+    ]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase();
+    const searchMatch = !searchQuery || searchableText.includes(searchQuery);
     const categoryMatch =
       filter.categories.length === 0 || filter.categories.includes(p?.category);
     const brandMatch =
       filter.brands.length === 0 || filter.brands.includes(p?.brand);
     const priceMatch = (p?.productPrice || 0) <= filter.price;
-    return categoryMatch && brandMatch && priceMatch;
+    return searchMatch && categoryMatch && brandMatch && priceMatch;
   });
 
   useEffect(() => {
@@ -69,7 +81,11 @@ export default function Products() {
           <div className="mb-4 sm:mb-5 flex items-center justify-between flex-wrap gap-2">
             <div>
               <h2 className="text-lg sm:text-xl font-bold text-gray-900 tracking-tight">
-                All Products
+                {searchQuery ? (
+                  <>Search results for: {searchParams.get("search")}</>
+                ) : (
+                  "All Products"
+                )}
               </h2>
               <p className="text-xs text-gray-400 mt-0.5">
                 {filteredProducts.length} result{filteredProducts.length !== 1 ? "s" : ""} found
@@ -85,8 +101,8 @@ export default function Products() {
           ) : filteredProducts.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 gap-3 text-center">
               <PackageSearch className="w-12 h-12 text-gray-200" />
-              <p className="text-gray-500 font-semibold">No products match your filters</p>
-              <p className="text-gray-400 text-sm">Try adjusting or resetting your filters</p>
+              <p className="text-gray-500 font-semibold">No products match your search or filters</p>
+              <p className="text-gray-400 text-sm">Try a different search or reset your filters</p>
             </div>
           ) : (
             <div className="grid gap-3 sm:gap-4 grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3">
