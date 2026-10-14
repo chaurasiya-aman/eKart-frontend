@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { useDispatch } from "react-redux";
 import { setUser } from "@/redux/userSlice";
 import api from "@/api/axios";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
 export function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -48,14 +49,10 @@ export function Login() {
         setFormData({ email: "", password: "" });
       }
     } catch (error) {
-      console.error(error);
-
       const status = error?.response?.status;
-      const message =
-        error?.response?.data?.message ||
-        (status === 401
-          ? "Incorrect password. Please try again."
-          : "We couldn't sign you in. Please try again.");
+      const message = getErrorMessage(error, status === 401
+        ? "Incorrect password. Please try again."
+        : "We couldn't sign you in. Check your details and try again.");
 
       toast.error(message, {
         description:

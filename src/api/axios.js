@@ -2,6 +2,7 @@ import axios from "axios";
 import store from "../redux/store";
 import { setError } from "../redux/errorSlice";
 import { requestFinished, requestStarted } from "../redux/loadingSlice";
+import { getErrorMessage } from "../utils/getErrorMessage";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -9,7 +10,7 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  if (config.skipGlobalLoading) return config;
+  if (!config.showGlobalLoading) return config;
 
   config.__globalLoadingTracked = true;
   store.dispatch(requestStarted());
@@ -33,21 +34,16 @@ api.interceptors.response.use(
     if (axios.isCancel(error)) return Promise.reject(error);
 
     const status = error.response?.status;
-    const isNetworkError = !error.response;
     const isServerError = status >= 500;
     const isRateLimited = status === 429;
 
-    if (isNetworkError || isServerError || isRateLimited) {
-      const title = isNetworkError
+    if (!error.response || isServerError || isRateLimited) {
+      const title = !error.response
         ? "Connection problem"
         : isRateLimited
           ? "Please slow down"
-          : "Service temporarily unavailable";
-      const message = isNetworkError
-        ? "We couldn't reach the server. Check your connection and try again."
-        : isRateLimited
-          ? "Too many requests were made. Please wait a moment and try again."
-          : "We're having trouble completing your request. Please try again shortly.";
+          : "We couldn't complete that request";
+      const message = getErrorMessage(error, "The service could not complete your request. Please try again shortly.");
 
       error.globalHandled = true;
       store.dispatch(

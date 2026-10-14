@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Search } from "lucide-react";
 import api from "@/api/axios";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 import "@/utils/AllUsers.css";
 
 const AVATAR_VARIANTS = [
@@ -40,7 +41,7 @@ export default function AllUsers() {
       .then((res) => setUsers(res.data.users ?? res.data))
       .catch((err) => {
         console.error(err);
-        setError("Failed to load users. Please try again.");
+        setError(getErrorMessage(err, "We couldn't load the user list. Please try again."));
       })
       .finally(() => setLoading(false));
   }, []);

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import api from "@/api/axios";
 import ProductDetails from "@/components/ProductDetails";
 import { toast } from "sonner";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 import { Loader2 } from "lucide-react";
 
 export default function ProductPage() {
@@ -17,7 +18,7 @@ export default function ProductPage() {
       const res = await api.get(`${API_URL}/api/v1/product/${id}`);
       if (res.data.success) setProduct(res.data.product);
     } catch (err) {
-      toast.error(err?.response?.data?.message || err.message);
+      toast.error(getErrorMessage(err, "We couldn't load this product. Please refresh and try again."));
     } finally {
       setLoading(false);
     }

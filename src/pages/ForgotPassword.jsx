@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 import api from "@/api/axios";
 
 export default function ForgotPassword() {
@@ -30,7 +31,7 @@ export default function ForgotPassword() {
         toast.success("OTP Sent Successfully");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Something went wrong");
+      toast.error(getErrorMessage(error, "We couldn't send a verification code. Check the email and try again."));
     } finally {
       setLoading(false);
     }
@@ -51,7 +52,7 @@ export default function ForgotPassword() {
         navigate("/reset-password");
       }
     } catch (err) {
-      toast.error(err.response?.data?.message || "Invalid OTP");
+      toast.error(getErrorMessage(err, "That verification code is invalid or expired. Request a new code and try again."));
     } finally {
       setLoading(false);
     }

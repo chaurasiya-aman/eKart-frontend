@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import { setUser } from "@/redux/userSlice";
 import EditProfile from "./EditProfile";
 import api from "@/api/axios";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
 const Profile = () => {
   const { user } = useSelector((state) => state.user);
@@ -36,7 +37,7 @@ const Profile = () => {
       const res = await api.get(`${API_URL}/api/v1/user/get-user/${user._id}`);
       setProfileDetails(res.data.user);
     } catch (error) {
-      console.log(error);
+      toast.error(getErrorMessage(error, "We couldn't load your profile. Please try again."));
     } finally {
       setLoadingProfile(false);
     }
@@ -50,6 +51,7 @@ const Profile = () => {
         {},
         {
           withCredentials: true,
+          showGlobalLoading: true,
         },
       );
       if (res.data.success) {
@@ -59,7 +61,7 @@ const Profile = () => {
         }, 2000);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(getErrorMessage(error, "We couldn't log you out. Please try again."));
     } finally {
       dispatch(setUser(null));
       localStorage.removeItem("serverNoticeSeen");
@@ -98,8 +100,7 @@ const Profile = () => {
       profileObj();
       toast.success("Image uploaded successfully");
     } catch (error) {
-      toast.error("Upload failed");
-      console.log(error);
+      toast.error(getErrorMessage(error, "We couldn't upload your profile photo. Check the file and try again."));
     } finally {
       setIsUploading(false);
     }
@@ -125,8 +126,7 @@ const Profile = () => {
       profileObj();
       toast.success("Profile photo deleted successfully");
     } catch (error) {
-      toast.error("Deletion failed");
-      console.log(error);
+      toast.error(getErrorMessage(error, "We couldn't delete your profile photo. Please try again."));
     } finally {
       setIsDeleting(false);
     }

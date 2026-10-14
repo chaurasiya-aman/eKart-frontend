@@ -9,6 +9,7 @@ import {
 import { Link, useParams } from "react-router-dom";
 import { CheckCircle, XCircle } from "lucide-react";
 import api from "@/api/axios";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 import "@/utils/VerifyEmail.css";
 
 export function VerifyEmail() {
@@ -36,9 +37,7 @@ export function VerifyEmail() {
     } catch (error) {
       setSuccess(false);
       setStatus(
-        error.response?.data?.message ||
-          error.message ||
-          "Verification failed",
+        getErrorMessage(error, "We couldn't verify your email. The link may have expired; request a new one and try again."),
       );
     }
   };

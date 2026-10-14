@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "@/api/axios";
+import { getErrorMessage } from "@/utils/getErrorMessage";
+import { toast } from "sonner";
 import "@/utils/ChatAI.css";
 
 const NOVA_GREETING = {
@@ -191,8 +193,9 @@ export default function ChatAI() {
         const categories = [...new Set(products.map((p) => p.category).filter(Boolean))];
         const brands     = [...new Set(products.map((p) => p.brand).filter(Boolean))];
         setFilters({ categories, brands });
-      } catch {
+      } catch (error) {
         setFilters({ categories: [], brands: [] });
+        toast.error(getErrorMessage(error, "Product filters couldn't load. You can still ask Nova for help."));
       }
     };
     fetchFilters();
@@ -259,9 +262,9 @@ export default function ChatAI() {
         { type: "bot", text: data.reply, products: data.products || [] },
       ]);
     } catch (err) {
-      const errText = err.name === "AbortError"
+      const errText = err.name === "AbortError" || err.code === "ERR_CANCELED"
         ? "That took too long. Please try again or rephrase your question."
-        : "Oops! Something went wrong. Please try again.";
+        : getErrorMessage(err, "Nova couldn't answer just now. Please try again in a moment.");
       setMessages((prev) => [...prev, { type: "bot", text: errText, products: [] }]);
     } finally {
       clearTimeout(slowTimer);

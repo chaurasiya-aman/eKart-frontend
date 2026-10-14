@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import api from "@/api/axios";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
 const EditProfile = ({ onProfileUpdated, initialData, type }) => {
   const [formData, setFormData] = useState({
@@ -45,7 +46,7 @@ const EditProfile = ({ onProfileUpdated, initialData, type }) => {
         type("profile");
       }
     } catch (error) {
-      toast.error("Something went wrong");
+      toast.error(getErrorMessage(error, "We couldn't save your profile. Check your details and try again."));
     } finally {
       setIsUpdate(false);
     }

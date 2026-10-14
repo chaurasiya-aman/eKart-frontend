@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Search, RefreshCw, PackageCheck } from "lucide-react";
 import api from "@/api/axios";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 import "@/utils/AdminOrders.css";
 
 const ORDER_STATUSES = ["placed", "processing", "shipped", "delivered", "cancelled"];
@@ -23,7 +24,7 @@ export default function AdminOrders() {
       const response = await api.get("/api/v1/orders/admin");
       setOrders(response.data.orders || []);
     } catch (requestError) {
-      setError(requestError.response?.data?.message || "Could not load orders.");
+      setError(getErrorMessage(requestError, "We couldn't load orders. Please try again."));
     } finally {
       setLoading(false);
     }
@@ -57,7 +58,7 @@ export default function AdminOrders() {
         order._id === orderId ? response.data.order : order
       ));
     } catch (requestError) {
-      setError(requestError.response?.data?.message || "Could not update this order.");
+      setError(getErrorMessage(requestError, "We couldn't update this order. Please try again."));
     } finally {
       setBusyOrderId("");
     }
@@ -75,7 +76,7 @@ export default function AdminOrders() {
         <div>
           <p className="admin-orders__eyebrow">Store management</p>
           <h1>Orders</h1>
-          <p>Review demo orders, customer details, and fulfillment status.</p>
+          <p>Review customer orders, details, and fulfillment status.</p>
         </div>
         <button className="admin-orders__refresh" type="button" onClick={loadOrders} disabled={loading}>
           <RefreshCw size={16} aria-hidden="true" /> Refresh
@@ -107,7 +108,7 @@ export default function AdminOrders() {
           <div className="admin-orders__empty">
             <PackageCheck aria-hidden="true" />
             <strong>No orders found</strong>
-            <span>Orders placed through the demo checkout will appear here.</span>
+            <span>Orders placed through checkout will appear here.</span>
           </div>
         ) : (
           <div className="admin-orders__list">
@@ -146,7 +147,7 @@ export default function AdminOrders() {
                 </div>
 
                 <div className="admin-order__bottom">
-                  <span>{order.paymentMethod} ? Simulated payment</span>
+                  <span>Payment: {order.paymentMethod} · Not processed</span>
                   <strong>{formatPrice(order.total)}</strong>
                 </div>
 

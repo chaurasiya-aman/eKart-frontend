@@ -1,4 +1,5 @@
 import api from "@/api/axios";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
@@ -82,7 +83,7 @@ export default function CartItem({
       } else {
         toast.error(
           res.data.message ||
-            "Failed to update quantity"
+            "We couldn't update the quantity. Please try again."
         );
       }
     } catch (error) {
@@ -91,10 +92,7 @@ export default function CartItem({
         error
       );
 
-      toast.error(
-        error?.response?.data?.message ||
-          "Failed to update quantity"
-      );
+      toast.error(getErrorMessage(error, "We couldn't update the quantity. Please try again."));
     } finally {
       setLoadingQty(null);
     }
@@ -128,16 +126,13 @@ export default function CartItem({
 
         toast.error(
           res.data.message ||
-            "Failed to remove item"
+            "We couldn't remove this item. Please try again."
         );
       }
     } catch (error) {
       setItems(previousItems);
 
-      toast.error(
-        error?.response?.data?.message ||
-          "Failed to remove item"
-      );
+      toast.error(getErrorMessage(error, "We couldn't remove this item. Please try again."));
     } finally {
       setRemoving(null);
     }

@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import api from "@/api/axios";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
 export default function ProductDetails({ product }) {
   const defaultImage = product?.productImage?.[0]?.url;
@@ -96,10 +97,7 @@ export default function ProductDetails({ product }) {
         );
       }
     } catch (error) {
-      toast.error(
-        error?.response?.data?.message ||
-          "Failed to add product to cart"
-      );
+      toast.error(getErrorMessage(error, "We couldn't add this product to your cart. Please try again."));
     } finally {
       setAddingToCart(false);
     }
@@ -157,10 +155,7 @@ export default function ProductDetails({ product }) {
         }
       }
     } catch (error) {
-      toast.error(
-        error?.response?.data?.message ||
-          "Failed to update quantity"
-      );
+      toast.error(getErrorMessage(error, "We couldn't update the quantity. Please try again."));
     } finally {
       setAddingToCart(false);
     }
@@ -187,10 +182,7 @@ export default function ProductDetails({ product }) {
         );
       }
     } catch (error) {
-      toast.error(
-        error?.response?.data?.message ||
-          "Failed to remove product"
-      );
+      toast.error(getErrorMessage(error, "We couldn't remove this product from your cart. Please try again."));
     } finally {
       setAddingToCart(false);
     }
@@ -221,10 +213,7 @@ export default function ProductDetails({ product }) {
         navigate("/products");
       }
     } catch (error) {
-      toast.error(
-        error?.response?.data?.message ||
-          "Failed to delete product"
-      );
+      toast.error(getErrorMessage(error, "We couldn't delete this product. Please try again."));
     } finally {
       setLoading(false);
     }

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
 export default function ResetPassword() {
   const [password, setPassword] = useState("");
@@ -36,7 +37,7 @@ export default function ResetPassword() {
         navigate("/login");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || error.message || "Something went wrong");
+      toast.error(getErrorMessage(error, "We couldn't update your password. Verify the code and try again."));
     } finally {
       setLoading(false);
     }

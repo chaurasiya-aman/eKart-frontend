@@ -20,6 +20,7 @@ import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/redux/userSlice";
 import api from "@/api/axios";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 import "@/utils/Navbar.css";
 
 const Navbar = () => {
@@ -37,14 +38,17 @@ const Navbar = () => {
       const res = await api.post(
         `${API_URL}/api/v1/user/logout`,
         {},
-        { headers: { Authorization: `Bearer ${accessToken}` } },
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+          showGlobalLoading: true,
+        },
       );
       if (res.data.success) {
         toast.success(res.data.message);
         setTimeout(() => toast.success("Thank You, Visit Again!!!"), 2000);
       }
     } catch (error) {
-      toast.error(error.message);
+      toast.error(getErrorMessage(error, "We couldn't log you out. Please try again."));
     } finally {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("serverNoticeSeen");

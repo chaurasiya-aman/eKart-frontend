@@ -1,6 +1,7 @@
 import api from "@/api/axios";
 import { ShoppingCart, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 import { useState, useEffect } from "react";
 
 export default function ProductCard({ product, onClick }) {
@@ -77,10 +78,7 @@ export default function ProductCard({ product, onClick }) {
         );
       }
     } catch (error) {
-      toast.error(
-        error?.response?.data?.message ||
-          "Failed to add product"
-      );
+      toast.error(getErrorMessage(error, "We couldn't add this product to your cart. Please try again."));
     } finally {
       setLoading(false);
     }
@@ -140,10 +138,7 @@ export default function ProductCard({ product, onClick }) {
         }
       }
     } catch (error) {
-      toast.error(
-        error?.response?.data?.message ||
-          "Failed to update quantity"
-      );
+      toast.error(getErrorMessage(error, "We couldn't update the quantity. Please try again."));
     } finally {
       setLoading(false);
     }
@@ -172,10 +167,7 @@ export default function ProductCard({ product, onClick }) {
         );
       }
     } catch (error) {
-      toast.error(
-        error?.response?.data?.message ||
-          "Failed to remove product"
-      );
+      toast.error(getErrorMessage(error, "We couldn't remove this product from your cart. Please try again."));
     } finally {
       setLoading(false);
     }

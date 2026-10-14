@@ -12,6 +12,8 @@ import {
   Smartphone,
 } from "lucide-react";
 import api from "@/api/axios";
+import { toast } from "sonner";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 import "@/utils/Checkout.css";
 
 const paymentMethods = [
@@ -30,8 +32,9 @@ export default function Checkout() {
   const [items, setItems] = useState([]);
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [checkoutError, setCheckoutError] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("upi");
-  const [isProcessingDemo, setIsProcessingDemo] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   useEffect(() => {
     if (!user?._id) {
@@ -52,8 +55,11 @@ export default function Checkout() {
         const cartItems = cartResponse.data.cart?.items || [];
         setItems(cartItems.filter((item) => item?.productId));
         setProfile(profileResponse.data.user || user);
-      } catch {
-        if (isMounted) setItems([]);
+      } catch (error) {
+        if (isMounted) {
+          setCheckoutError(getErrorMessage(error, "We couldn't prepare checkout. Please refresh and try again."));
+          setItems([]);
+        }
       } finally {
         if (isMounted) setLoading(false);
       }
@@ -76,10 +82,13 @@ export default function Checkout() {
   }, [items]);
 
   const selectedPayment = paymentMethods.find((method) => method.id === paymentMethod);
+  const hasDeliveryAddress = [profile?.address, profile?.city, profile?.zipCode, profile?.phoneNo]
+    .every((value) => typeof value === "string" && value.trim());
 
-  const handleDemoPayment = async () => {
-    if (isProcessingDemo) return;
-    setIsProcessingDemo(true);
+  const handlePayment = async () => {
+    if (isProcessing) return;
+    if (!hasDeliveryAddress) return;
+    setIsProcessing(true);
 
     try {
       await new Promise((resolve) => window.setTimeout(resolve, 900));
@@ -96,8 +105,9 @@ export default function Checkout() {
           itemCount: order.items.reduce((count, item) => count + Number(item.quantity || 0), 0),
         },
       });
-    } catch {
-      setIsProcessingDemo(false);
+    } catch (error) {
+      toast.error(getErrorMessage(error, "We couldn't place your order. Please try again."));
+      setIsProcessing(false);
     }
   };
   const deliveryAddress = [profile?.address, profile?.city, profile?.zipCode]
@@ -110,6 +120,18 @@ export default function Checkout() {
     return (
       <main className="checkout-page">
         <div className="checkout-loading" aria-live="polite">Preparing your checkout…</div>
+      </main>
+    );
+  }
+
+  if (checkoutError) {
+    return (
+      <main className="checkout-page">
+        <section className="checkout-empty" role="alert">
+          <h1>We couldn't prepare checkout</h1>
+          <p>{checkoutError}</p>
+          <Link to="/cart" className="checkout-primary-link">Return to cart</Link>
+        </section>
       </main>
     );
   }
@@ -161,6 +183,12 @@ export default function Checkout() {
                 </div>
                 <Link to="/profile" className="checkout-edit-link">Edit</Link>
               </div>
+              {!hasDeliveryAddress && (
+                <p className="checkout-address-error" role="alert">
+                  Add your street address, city, postal code, and phone number in your profile before placing this order.
+                  {" "}<Link to="/profile">Update your profile</Link>
+                </p>
+              )}
             </section>
 
             <section className="checkout-panel" aria-labelledby="payment-title">
@@ -204,7 +232,7 @@ export default function Checkout() {
                 <LockKeyhole aria-hidden="true" />
                 <p>
                   <strong>{selectedPayment?.label} selected.</strong>{" "}
-                  Academic demo only. Continue will simulate a result; no payment details are collected.
+                  This checkout does not process payments or collect payment details.
                 </p>
               </div>
             </section>
@@ -250,13 +278,13 @@ export default function Checkout() {
             <button
               type="button"
               className="checkout-continue-button"
-              onClick={handleDemoPayment}
-              disabled={isProcessingDemo}
+              onClick={handlePayment}
+              disabled={isProcessing || !hasDeliveryAddress}
             >
-              {isProcessingDemo ? "Preparing your demo order..." : "Place demo order"}
+              {isProcessing ? "Placing your order..." : "Place order"}
             </button>
             <p className="checkout-disclaimer">
-              <LockKeyhole aria-hidden="true" /> Academic project demo - no real payment
+              <LockKeyhole aria-hidden="true" /> Payment is not processed through this site
             </p>
           </aside>
         </div>

@@ -1,4 +1,5 @@
 import api from "@/api/axios";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 import CartItem from "@/components/CartItem";
 import OrderCard from "@/components/OrderCard";
 import { useEffect, useState } from "react";
@@ -40,10 +41,7 @@ export default function Cart() {
         setItems(validItems);
       }
     } catch (error) {
-      toast.error(
-        error?.response?.data?.message ||
-          "Failed to load cart"
-      );
+      toast.error(getErrorMessage(error, "We couldn't load your cart. Please try again."));
     } finally {
       setLoading(false);
     }

@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Eye, EyeOff, Loader2, ShoppingCart } from "lucide-react";
 import { toast } from "sonner";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 import api from "@/api/axios";
 
 export function SignUp() {
@@ -42,7 +43,7 @@ export function SignUp() {
         setFormData({ firstName: "", lastName: "", email: "", password: "" });
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Registration failed");
+      toast.error(getErrorMessage(error, "We couldn't create your account. Check your details and try again."));
     } finally {
       setLoading(false);
     }

@@ -41,10 +41,10 @@ export default function GlobalErrorModal() {
         </div>
         {code && <span className="global-error-modal__code">Error {code}</span>}
         <h2 id="global-error-title" className="global-error-modal__title">
-          {title || "Something went wrong"}
+          {title || "We couldn't complete that request"}
         </h2>
         <p id="global-error-message" className="global-error-modal__message">
-          {message || "Please try again in a moment."}
+          {message || "Please check your connection and try again. If the problem continues, contact support."}
         </p>
         <button
           type="button"

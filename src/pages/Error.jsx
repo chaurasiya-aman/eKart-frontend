@@ -14,8 +14,8 @@ const Error = ({ title: propTitle, message: propMessage, code: propCode }) => {
     code: reduxCode,
   } = useSelector((state) => state.error);
 
-  const title = reduxTitle || propTitle || "Something went wrong";
-  const message = reduxMessage || propMessage || "An unexpected error occurred.";
+  const title = reduxTitle || propTitle || "We couldn't complete that request";
+  const message = reduxMessage || propMessage || "Please check your connection and try again. If the problem continues, contact support.";
   const code = reduxCode || propCode || 500;
   const isNotFound = code === 404;
 
@@ -32,7 +32,7 @@ const Error = ({ title: propTitle, message: propMessage, code: propCode }) => {
         </div>
 
         <p className="error-card__eyebrow">
-          {isNotFound ? "Page not found" : "Something went wrong"}
+          {isNotFound ? "Page not found" : "Request could not be completed"}
         </p>
         {code && <span className="error-card__code">Error {code}</span>}
 

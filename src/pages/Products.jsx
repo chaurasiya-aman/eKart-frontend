@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
 export default function Products() {
   const API_URL = import.meta.env.VITE_API_URL;
@@ -32,7 +33,7 @@ export default function Products() {
         dispatch(setProducts(res.data.products));
       }
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Failed to load products");
+      toast.error(getErrorMessage(error, "We couldn't load products. Please try again."));
     } finally {
       setLoading(false);
     }

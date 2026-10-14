@@ -1,6 +1,7 @@
 import { useState } from "react";
 import api from "@/api/axios";
 import { toast } from "sonner";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 import { Loader2 } from "lucide-react";
 import ProductImageUploader from "@/components/ProductImageUploader";
 
@@ -62,7 +63,7 @@ export default function AddProduct() {
         setImages([]);
       }
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Failed to add product");
+      toast.error(getErrorMessage(error, "We couldn't add this product. Check the details and try again."));
     } finally {
       setLoading(false);
     }

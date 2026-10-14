@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import { MailCheck, RefreshCw } from "lucide-react";
 import "@/utils/Reverify.css";
 import api from "@/api/axios";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
 export default function Reverify() {
   const [resent, setResent] = useState(false);
@@ -21,16 +22,13 @@ export default function Reverify() {
       setLoading(true);
 
       const email = localStorage.getItem("userEmail");
-      console.log("Reverify email:", email);
 
       const response = await api.post(`/api/v1/user/reVerify`, { email });
 
       setMessage(response.data.message);
       setResent(true);
     } catch (error) {
-      console.error(error);
-
-      setMessage(error.response?.data?.message || "Something went wrong");
+      setMessage(getErrorMessage(error, "We couldn't resend the verification email. Check your email address and try again."));
       setResent(false);
     } finally {
       setLoading(false);

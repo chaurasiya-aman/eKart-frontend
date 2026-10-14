@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { PackageCheck } from "lucide-react";
 import api from "@/api/axios";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 import "@/utils/MyOrders.css";
 
 const formatPrice = (amount) => `INR ${Number(amount || 0).toLocaleString("en-IN")}`;
@@ -15,7 +16,7 @@ export default function MyOrders() {
   useEffect(() => {
     api.get("/api/v1/orders/mine")
       .then((response) => setOrders(response.data.orders || []))
-      .catch((requestError) => setError(requestError.response?.data?.message || "Could not load your orders."))
+      .catch((requestError) => setError(getErrorMessage(requestError, "We couldn't load your orders. Please try again.")))
       .finally(() => setLoading(false));
   }, []);
 
@@ -52,7 +53,7 @@ export default function MyOrders() {
                 ))}
               </div>
               <footer>
-                <span>{order.paymentMethod} ? Demo</span>
+                <span>Payment: {order.paymentMethod} · Not processed</span>
                 <strong>{formatPrice(order.total)}</strong>
               </footer>
             </article>
