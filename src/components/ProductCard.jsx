@@ -3,9 +3,12 @@ import { ShoppingCart, Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { getCartItemCount, setCartItemCount } from "@/redux/cartSlice";
 
 export default function ProductCard({ product, onClick }) {
   const API_URL = import.meta.env.VITE_API_URL;
+  const dispatch = useDispatch();
 
   const [qty, setQty] = useState(0);
   const [loading, setLoading] = useState(false);
@@ -71,6 +74,7 @@ export default function ProductCard({ product, onClick }) {
 
       if (res.data.success) {
         setQty(1);
+        dispatch(setCartItemCount(getCartItemCount(res.data.cart)));
 
         toast.success(
           res.data.message ||
@@ -122,6 +126,7 @@ export default function ProductCard({ product, onClick }) {
       );
 
       if (res.data.success) {
+        dispatch(setCartItemCount(getCartItemCount(res.data.cart)));
         const updatedItem =
           res.data.cart?.items?.find(
             (i) =>
@@ -160,6 +165,7 @@ export default function ProductCard({ product, onClick }) {
 
       if (res.data.success) {
         setQty(0);
+        dispatch(setCartItemCount(getCartItemCount(res.data.cart)));
 
         toast.success(
           res.data.message ||

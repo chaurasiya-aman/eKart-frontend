@@ -1,5 +1,5 @@
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import {
   ShoppingCart,
   ShoppingBag,
@@ -19,18 +19,43 @@ import {
 import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 import { setUser } from "@/redux/userSlice";
+import { clearCartItemCount, getCartItemCount, setCartItemCount } from "@/redux/cartSlice";
 import api from "@/api/axios";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 import "@/utils/Navbar.css";
 
 const Navbar = () => {
   const user = useSelector((state) => state.user.user);
+  const cartCount = useSelector((state) => state.cart.itemCount);
   const isLoggedIn = Boolean(user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
   const API_URL = import.meta.env.VITE_API_URL;
-  const cartCount = 0;
+  const showProductSearch = location.pathname === "/products";
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (!user?._id) {
+      dispatch(clearCartItemCount());
+      return undefined;
+    }
+
+    let isCurrent = true;
+    api.get("/api/v1/cart")
+      .then((response) => {
+        if (isCurrent) {
+          dispatch(setCartItemCount(getCartItemCount(response.data.cart)));
+        }
+      })
+      .catch(() => {
+        if (isCurrent) dispatch(clearCartItemCount());
+      });
+
+    return () => {
+      isCurrent = false;
+    };
+  }, [dispatch, user?._id]);
 
   const logOutHandler = async () => {
     try {
@@ -53,6 +78,7 @@ const Navbar = () => {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("serverNoticeSeen");
       dispatch(setUser(null));
+      dispatch(clearCartItemCount());
       navigate("/login");
     }
   };
@@ -69,7 +95,7 @@ const Navbar = () => {
           </span>
         </Link>
 
-        {isLoggedIn && (
+        {isLoggedIn && showProductSearch && (
           <ProductSearch className="product-search--desktop flex-1" />
         )}
 
@@ -77,12 +103,16 @@ const Navbar = () => {
           {isLoggedIn && (
             <Link
               to="/cart"
+              aria-label={cartCount > 0 ? `Cart with ${cartCount} ${cartCount === 1 ? "item" : "items"}` : "Cart"}
               className="relative p-2 rounded-xl hover:bg-gray-100 transition-colors"
             >
               <ShoppingBag className="h-5 w-5 text-gray-700" />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] h-4 w-4 rounded-full flex items-center justify-center font-bold">
-                  {cartCount}
+                <span
+                  className="absolute -top-1 -right-1 min-w-4 h-4 px-1 bg-red-500 text-white text-[9px] rounded-full flex items-center justify-center font-bold"
+                  aria-hidden="true"
+                >
+                  {cartCount > 99 ? "99+" : cartCount}
                 </span>
               )}
             </Link>
@@ -167,12 +197,14 @@ const Navbar = () => {
             >
               {isLoggedIn ? (
                 <>
-                  <div className="navbar-mobile-search">
-                    <ProductSearch
-                      className="product-search--mobile"
-                      onSearchComplete={() => setMobileMenuOpen(false)}
-                    />
-                  </div>
+                  {showProductSearch && (
+                    <div className="navbar-mobile-search">
+                      <ProductSearch
+                        className="product-search--mobile"
+                        onSearchComplete={() => setMobileMenuOpen(false)}
+                      />
+                    </div>
+                  )}
                   <Link to="/cart" className="navbar-mobile-item">
                     <ShoppingBag className="h-4 w-4" /> Cart
                   </Link>

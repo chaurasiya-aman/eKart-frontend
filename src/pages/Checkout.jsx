@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   ArrowLeft,
   Banknote,
@@ -14,6 +14,7 @@ import {
 import api from "@/api/axios";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/utils/getErrorMessage";
+import { clearCartItemCount } from "@/redux/cartSlice";
 import "@/utils/Checkout.css";
 
 const paymentMethods = [
@@ -28,6 +29,7 @@ const formatPrice = (amount) =>
 
 export default function Checkout() {
   const user = useSelector((state) => state.user.user);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [items, setItems] = useState([]);
   const [profile, setProfile] = useState(null);
@@ -82,12 +84,24 @@ export default function Checkout() {
   }, [items]);
 
   const selectedPayment = paymentMethods.find((method) => method.id === paymentMethod);
-  const hasDeliveryAddress = [profile?.address, profile?.city, profile?.zipCode, profile?.phoneNo]
-    .every((value) => typeof value === "string" && value.trim());
+  const missingOrderDetails = [
+    ["first name", profile?.firstName],
+    ["last name", profile?.lastName],
+    ["phone number", profile?.phoneNo],
+    ["street address", profile?.address],
+    ["city", profile?.city],
+    ["postal code", profile?.zipCode],
+  ]
+    .filter(([, value]) => typeof value !== "string" || !value.trim())
+    .map(([label]) => label);
+  const hasRequiredOrderDetails = missingOrderDetails.length === 0;
+  const missingDetailsText = missingOrderDetails.length > 1
+    ? `${missingOrderDetails.slice(0, -1).join(", ")}, and ${missingOrderDetails.at(-1)}`
+    : missingOrderDetails[0];
 
   const handlePayment = async () => {
     if (isProcessing) return;
-    if (!hasDeliveryAddress) return;
+    if (!hasRequiredOrderDetails) return;
     setIsProcessing(true);
 
     try {
@@ -96,6 +110,7 @@ export default function Checkout() {
         paymentMethod: selectedPayment?.label || "UPI",
       });
       const order = response.data.order;
+      dispatch(clearCartItemCount());
       navigate("/order-placed", {
         state: {
           isDemo: true,
@@ -183,9 +198,9 @@ export default function Checkout() {
                 </div>
                 <Link to="/profile" className="checkout-edit-link">Edit</Link>
               </div>
-              {!hasDeliveryAddress && (
+              {!hasRequiredOrderDetails && (
                 <p className="checkout-address-error" role="alert">
-                  Add your street address, city, postal code, and phone number in your profile before placing this order.
+                  Please add your {missingDetailsText} in your profile before placing this order.
                   {" "}<Link to="/profile">Update your profile</Link>
                 </p>
               )}
@@ -279,7 +294,7 @@ export default function Checkout() {
               type="button"
               className="checkout-continue-button"
               onClick={handlePayment}
-              disabled={isProcessing || !hasDeliveryAddress}
+              disabled={isProcessing || !hasRequiredOrderDetails}
             >
               {isProcessing ? "Placing your order..." : "Place order"}
             </button>

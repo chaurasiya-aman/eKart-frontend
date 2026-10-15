@@ -3,13 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import "@/utils/Profile.css";
 import {
   Card,
-  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CheckCircle, User, Camera, Layers, Loader2 } from "lucide-react";
+import { CheckCircle, User, Camera, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -17,6 +16,8 @@ import { setUser } from "@/redux/userSlice";
 import EditProfile from "./EditProfile";
 import api from "@/api/axios";
 import { getErrorMessage } from "@/utils/getErrorMessage";
+import { clearCartItemCount } from "@/redux/cartSlice";
+import MyOrders from "@/components/MyOrders";
 
 const Profile = () => {
   const { user } = useSelector((state) => state.user);
@@ -64,6 +65,7 @@ const Profile = () => {
       toast.error(getErrorMessage(error, "We couldn't log you out. Please try again."));
     } finally {
       dispatch(setUser(null));
+      dispatch(clearCartItemCount());
       localStorage.removeItem("serverNoticeSeen");
       setIsLogout(false);
       navigate("/login");
@@ -334,19 +336,7 @@ const Profile = () => {
           </TabsContent>
 
           <TabsContent value="orders">
-            <Card className="profile-card">
-              <CardHeader>
-                <div className="orders-empty">
-                  <div className="orders-icon-wrap">
-                    <Layers className="w-9 h-9 text-gray-300" />
-                  </div>
-                  <p className="orders-no-orders-title">No orders yet</p>
-                </div>
-              </CardHeader>
-              <CardContent className="text-sm text-muted-foreground hidden">
-                No orders yet.
-              </CardContent>
-            </Card>
+            <MyOrders embedded />
           </TabsContent>
 
           <TabsContent value="edit-profile">

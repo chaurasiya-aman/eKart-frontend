@@ -14,7 +14,7 @@
 .product-search:focus-within {
   border-color: #6366f1;
   background: #fff;
-  box-shadow: 0 0 0 3px rgb(99 102 241 / 12%);
+  box-shadow: 0 0 0 1px rgb(99 102 241 / 12%);
 }
 
 .product-search__input {
@@ -27,6 +27,10 @@
   background: transparent;
   color: #111827;
   font-size: 14px;
+}
+
+.product-search__input:focus-visible {
+  outline: none;
 }
 
 .product-search__input::placeholder {

@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Loader2, ShoppingBag } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { getCartItemCount, setCartItemCount } from "@/redux/cartSlice";
 import "@/utils/Cart.css";
 
 function fmt(n) {
@@ -15,6 +17,7 @@ function fmt(n) {
 export default function Cart() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
 
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -30,6 +33,7 @@ export default function Cart() {
       if (res.data.success) {
         const cartItems =
           res.data.cart?.items || [];
+        dispatch(setCartItemCount(getCartItemCount(res.data.cart)));
 
         // Only keep valid cart items
         const validItems = cartItems.filter(

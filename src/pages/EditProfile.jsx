@@ -68,7 +68,7 @@ const EditProfile = ({ onProfileUpdated, initialData, type }) => {
   }, [initialData]);
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-xl space-y-5 mt-4 px-1">
+    <form onSubmit={handleSubmit} className="profile-edit-form w-full max-w-xl space-y-5 mt-4 px-1">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="firstName">First Name</Label>
@@ -78,6 +78,7 @@ const EditProfile = ({ onProfileUpdated, initialData, type }) => {
             placeholder="John"
             value={formData.firstName}
             onChange={handleChange}
+            className="profile-edit-input"
           />
         </div>
         <div className="space-y-2">
@@ -88,6 +89,7 @@ const EditProfile = ({ onProfileUpdated, initialData, type }) => {
             placeholder="Doe"
             value={formData.lastName}
             onChange={handleChange}
+            className="profile-edit-input"
           />
         </div>
       </div>
@@ -100,6 +102,7 @@ const EditProfile = ({ onProfileUpdated, initialData, type }) => {
           placeholder="Tell us about yourself"
           value={formData.about}
           onChange={handleChange}
+            className="profile-edit-input"
         />
       </div>
 
@@ -111,7 +114,7 @@ const EditProfile = ({ onProfileUpdated, initialData, type }) => {
           type="email"
           value={userEmail}
           disabled
-          className="cursor-not-allowed opacity-60"
+            className="profile-edit-input cursor-not-allowed opacity-60"
         />
       </div>
 
@@ -123,6 +126,7 @@ const EditProfile = ({ onProfileUpdated, initialData, type }) => {
           inputMode="numeric"
           placeholder="10-digit number"
           value={formData.phoneNo}
+            className="profile-edit-input"
           onChange={(e) => {
             const value = e.target.value.replace(/\D/g, "").slice(0, 10);
             setFormData((prev) => ({ ...prev, phoneNo: value }));
@@ -138,6 +142,7 @@ const EditProfile = ({ onProfileUpdated, initialData, type }) => {
           placeholder="Enter your address"
           value={formData.address}
           onChange={handleChange}
+            className="profile-edit-input"
         />
       </div>
 
@@ -150,6 +155,7 @@ const EditProfile = ({ onProfileUpdated, initialData, type }) => {
             placeholder="Enter your city"
             value={formData.city}
             onChange={handleChange}
+            className="profile-edit-input"
           />
         </div>
         <div className="space-y-2">
@@ -160,6 +166,7 @@ const EditProfile = ({ onProfileUpdated, initialData, type }) => {
             placeholder="Zip code"
             value={formData.zipCode}
             onChange={handleChange}
+            className="profile-edit-input"
           />
         </div>
       </div>

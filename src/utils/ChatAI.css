@@ -613,8 +613,8 @@ html, body, #root { margin: 0; padding: 0; min-height: 100%; }
 }
 
 .nova-input-wrap:focus-within {
-  border-color: rgba(201,168,76,0.4);
-  box-shadow: 0 0 0 3px rgba(201,168,76,0.08);
+  border-color: rgba(201,168,76,0.6);
+  box-shadow: inset 0 0 0 1px rgba(201,168,76,0.12);
 }
 
 .nova-input {
@@ -628,6 +628,10 @@ html, body, #root { margin: 0; padding: 0; min-height: 100%; }
   padding: 6px 0;
   caret-color: #c9a84c;
   min-width: 0;
+}
+
+.nova-input:focus-visible {
+  outline: none;
 }
 
 .nova-input::placeholder { color: #3a3a4a; }

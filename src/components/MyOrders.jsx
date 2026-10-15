@@ -8,7 +8,7 @@ const formatPrice = (amount) => `INR ${Number(amount || 0).toLocaleString("en-IN
 const formatDate = (value) =>
   value ? new Intl.DateTimeFormat("en-IN", { dateStyle: "medium", timeStyle: "short" }).format(new Date(value)) : "-";
 
-export default function MyOrders() {
+export default function MyOrders({ embedded = false }) {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -20,8 +20,10 @@ export default function MyOrders() {
       .finally(() => setLoading(false));
   }, []);
 
+  const OrdersContainer = embedded ? "section" : "main";
+
   return (
-    <main className="my-orders">
+    <OrdersContainer className={`my-orders${embedded ? " my-orders--embedded" : ""}`}>
       <header className="my-orders__header">
         <p className="my-orders__eyebrow">Your account</p>
         <h1>My orders</h1>
@@ -60,6 +62,6 @@ export default function MyOrders() {
           ))}
         </div>
       )}
-    </main>
+    </OrdersContainer>
   );
 }

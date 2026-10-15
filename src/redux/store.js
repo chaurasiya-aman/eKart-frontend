@@ -3,6 +3,7 @@ import userReducer from "./userSlice";
 import errorReducer from "./errorSlice";
 import productReducer from "./productSlice";
 import loadingReducer from "./loadingSlice";
+import cartReducer from "./cartSlice";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import {
@@ -27,6 +28,7 @@ const store = configureStore({
     error: errorReducer,
     product: productReducer,
     loading: loadingReducer,
+    cart: cartReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

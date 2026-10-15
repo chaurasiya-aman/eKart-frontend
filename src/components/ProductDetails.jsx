@@ -9,10 +9,11 @@ import {
   Loader2,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "sonner";
 import api from "@/api/axios";
 import { getErrorMessage } from "@/utils/getErrorMessage";
+import { getCartItemCount, setCartItemCount } from "@/redux/cartSlice";
 
 export default function ProductDetails({ product }) {
   const defaultImage = product?.productImage?.[0]?.url;
@@ -28,6 +29,7 @@ export default function ProductDetails({ product }) {
   const navigate = useNavigate();
 
   const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -90,6 +92,7 @@ export default function ProductDetails({ product }) {
 
       if (res.data.success) {
         setQty(1);
+        dispatch(setCartItemCount(getCartItemCount(res.data.cart)));
 
         toast.success(
           res.data.message ||
@@ -136,6 +139,7 @@ export default function ProductDetails({ product }) {
       );
 
       if (res.data.success) {
+        dispatch(setCartItemCount(getCartItemCount(res.data.cart)));
         const updatedItems =
           res.data.cart?.items || [];
 
@@ -175,6 +179,7 @@ export default function ProductDetails({ product }) {
 
       if (res.data.success) {
         setQty(0);
+        dispatch(setCartItemCount(getCartItemCount(res.data.cart)));
 
         toast.success(
           res.data.message ||

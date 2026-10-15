@@ -1,4 +1,5 @@
 .my-orders { min-height: 100vh; padding: 96px 16px 48px; background: #f8fafc; color: #111827; }
+.my-orders.my-orders--embedded { min-height: 0; padding: 0; background: transparent; }
 .my-orders__header, .my-orders__list, .my-orders__error, .my-orders__empty { width: min(100%, 900px); margin-right: auto; margin-left: auto; }
 .my-orders__header { margin-bottom: 22px; }
 .my-orders__eyebrow { margin: 0 0 5px; color: #4f46e5; font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }

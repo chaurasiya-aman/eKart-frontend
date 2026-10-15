@@ -1,5 +1,7 @@
 import api from "@/api/axios";
 import { getErrorMessage } from "@/utils/getErrorMessage";
+import { useDispatch } from "react-redux";
+import { getCartItemCount, setCartItemCount } from "@/redux/cartSlice";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
@@ -12,6 +14,7 @@ export default function CartItem({
 }) {
   const [removing, setRemoving] = useState(null);
   const [loadingQty, setLoadingQty] = useState(null);
+  const dispatch = useDispatch();
 
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -70,6 +73,7 @@ export default function CartItem({
       if (res.data.success) {
         const updatedItems =
           res.data.cart?.items || [];
+        dispatch(setCartItemCount(getCartItemCount(res.data.cart)));
 
         const validItems =
           updatedItems.filter(
@@ -128,6 +132,9 @@ export default function CartItem({
           res.data.message ||
             "We couldn't remove this item. Please try again."
         );
+      }
+      else {
+        dispatch(setCartItemCount(getCartItemCount(res.data.cart)));
       }
     } catch (error) {
       setItems(previousItems);
